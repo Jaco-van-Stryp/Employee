@@ -264,8 +264,9 @@ function AddProject() {
         convertToFireBase(Jobs);
         window.scrollTo(0, 0);
         alert("New Project Added Successfully")
-        sendMail(clientName, "We just wanted to let you know that we've started work on your website: " + address + "! We will keep you updated at all times. We Estimate your website will be completed on " + dueDate, clientEmail + " or earlier!", developer);
 
+        sendMail(clientName, "We just wanted to let you know that we've started work on your website: " + address + "! We will keep you updated at all times. We Estimate your website will be completed on " + dueDate + " or earlier!", clientEmail, developer);
+        sendMail("Developer", "A new website project has been assigned to your name --> " + address + "! Please ensure you complete it before " + dueDate + " or earlier! Instructions are as follows:" + instructions + ". You will be paid: R" + (0.7 * clientInvoiced).toFixed(2) + " when the project is completed. Please view and update the project as you go via employee.jaxifysoftware.com", developer, "jaxifybusiness@gmail.com");
     }
 
 }
