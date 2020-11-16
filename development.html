@@ -39,7 +39,7 @@
         </div>
         <div class="row my-row">
             <div class="col fronttext my-col mt-4">
-                <h1 id="user_display_name">Loading...</h1>
+                <h1 id="user_display_name">Due To You This Month: R0.00</h1>
                 <hr />
             </div>
         </div>
@@ -49,33 +49,125 @@
             </div>
         </div>
 
+        <table id="mainTable"></table>
+        <!--Add Project-->
         <div class="row my-row">
             <div class="col fronttext my-col mt-4">
-                <h5 id="dev_compensation"></h5>
-            </div>
-        </div>
-        <div class="row my-row">
-            <div class="col fronttext my-col mt-4">
-                <h5 id="dev_instructions_before"></h5>
+                <h2 id="dev_backlog_status"></h2>
             </div>
         </div>
 
-        <div class="row my-row">
-            <div class="col fronttext my-col mt-4">
-                <textarea style="display: none" type="text" rows="10" class="fronttext w-50" placeholder="Loading" readonly id="dev_instructions"></textarea>
-                <br /><br />
-                <button style="display: none" id="quickVis01" class="btn btn-success mt-3 mr-3 w-25">
-            Accept
+        <div class="row">
+            <div class="col mt-3 fronttext">
+                <button class="btn btn-danger w-25" type="button" data-toggle="collapse" data-target="#addproject" aria-expanded="false" aria-controls="addproject">
+            View / Register New / Update Project
           </button>
 
-                <button style="display: none" id="quickVis02" class="btn btn-danger mt-3 ml-3 w-25">
-            Decline
-          </button>
-                <br />
-                <br />
-                <br />
+                <div class="collapse fronttext" id="addproject">
+                    <div class="form-group fronttext mt-5">
+                        <label for="pwd">Project ID</label>
+                        <br />
+                        <input type="text" class="fronttext w-50" placeholder="Project ID - 8 Characters" id="project_ID" />
+                        <button class="btn btn-info" id="auto_generate">
+                Auto Generate
+              </button>
+                        <button class="btn btn-success">Load ID</button>
+
+                        <br />
+
+                        <br />
+                        <label for="pwd">Project Type</label>
+                        <br />
+                        <button class="btn btn-success">Website</button>
+                        <button class="btn btn-danger">Desktop</button>
+                        <button class="btn btn-danger">Mobile</button>
+                        <br />
+
+                        <br />
+
+                        <label for="pwd">Developer Email Address</label>
+
+                        <br />
+                        <input type="text" class="fronttext w-50" placeholder="Developer Email Address" id="project_developer_email" />
+
+                        <br />
+                        <br />
+
+                        <label for="pwd">Project Manager Email Address</label>
+                        <br />
+                        <input type="text" class="fronttext w-50" placeholder="Project Manager Email Address" id="project_manager_email" /><br />
+                        <br />
+
+                        <label for="pwd">Reference Email Address</label>
+                        <br />
+                        <input type="text" class="fronttext w-50" placeholder="Reference ID" id="project_reference_email" />
+                        <br />
+                        <br />
+
+                        <label for="pwd">Client Full Name</label>
+                        <br />
+                        <input type="text" class="fronttext w-50" placeholder="Client Full Name" id="project_client_name" />
+
+                        <br />
+                        <br />
+
+                        <label for="pwd">Client Email Address</label>
+                        <br />
+                        <input type="text" class="fronttext w-50" placeholder="Client Email Address" id="project_client_email" />
+                        <br /><br />
+                        <label for="pwd">Client Invoiced</label>
+                        <br />
+                        <input type="text" class="fronttext w-50" placeholder="Client Invoice Amount" id="project_client_invoiced" />
+                        <br />
+                        <br />
+                        <label for="pwd">Wave Invoice URL</label>
+                        <br />
+
+                        <input type="text" class="fronttext w-50" placeholder="Wave Invoice URL" id="invoice_URL" />
+                        <br />
+                        <br />
+                        <label for="pwd">Status</label>
+                        <br />
+                        <button class="btn btn-success mt-3">Project Registered</button>
+                        <button class="btn btn-danger mt-3">Client Invoiced</button>
+                        <button class="btn btn-danger mt-3">Awaiting Developer</button>
+                        <button class="btn btn-danger mt-3">Project In Progress</button>
+                        <button class="btn btn-danger mt-3">Project Completed</button>
+                        <button class="btn btn-danger mt-3">
+                Project Assigned To Client
+              </button>
+                        <button class="btn btn-danger mt-3">Payment Received</button>
+                        <button class="btn btn-danger mt-3">
+                Developer Paid & Project Complete
+              </button>
+                        <br />
+
+                        <button class="btn btn-danger mt-3">
+                Client Refunded / Canceled
+              </button>
+
+                        <br /><br />
+                        <label for="pwd">Project Instructions</label>
+                        <br />
+                        <textarea type="text" rows="10" class="fronttext w-50" placeholder="Project Instructions" id="project_instructions"></textarea>
+                        <br /><br />
+                        <label for="pwd">Due Date</label>
+                        <br />
+                        <input type="text" class="fronttext w-50" placeholder="Due Date" id="project_due_date" />
+                        <br /><br />
+                        <button onclick="AddProject()" id="final_add_project" class="btn btn-info w-25">
+                Add / Update Project
+              </button>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                </div>
             </div>
         </div>
+        <!--View All Projects-->
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js " integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj " crossorigin="anonymous "></script>

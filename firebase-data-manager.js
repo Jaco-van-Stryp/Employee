@@ -107,7 +107,6 @@
                     Status: projectStatus,
                     ProjectInstructions: instructions,
                     DueDate: dueDate,
-                    lastUpdatedBy: fbuser
                 }).then(function() {
                     db.collection("employees").doc(developer).update({
                             cur_prj_id: projID

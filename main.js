@@ -1,4 +1,9 @@
 //console.log("Auth - " + getCookie("self_authenticated"))
+function storeSearchQuery(query) {
+    var mainData = "user=" + query
+    document.cookie = mainData;
+
+}
 
 function loginError(message) {
     stopLoading();
@@ -68,6 +73,7 @@ function loginError(message) {
                     console.log(firebaseUser.email)
                     userData.get().then(function(doc) {
                         if (doc.exists) {
+                            storeSearchQuery(firebaseUser.email);
                             auth_role = (doc.get("emp_job"));
                             if (auth_role == "Director") {
                                 document.location = 'management.html';

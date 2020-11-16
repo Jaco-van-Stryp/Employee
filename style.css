@@ -4,6 +4,38 @@ body {
     background-size: cover;
 }
 
+a {
+    color: white;
+}
+
+button {
+    background-color: green;
+    margin: 3px;
+    color: white;
+    border-color: white;
+    border-radius: 15px;
+    width: 70%;
+    border-style: solid;
+    border-width: 2px;
+}
+
+table {
+    width: 100%;
+    text-align: center;
+    border-color: white;
+    border-style: solid;
+}
+
+td,
+th {
+    border-color: white;
+    border-style: solid;
+}
+
+th {
+    background-color: red;
+}
+
 
 /*
 .my-container {

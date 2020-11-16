@@ -9,150 +9,185 @@ var firebaseConfig = {
     messagingSenderId: "202323429712",
     appId: "1:202323429712:web:b0ac3661a5b8a00a330455",
     measurementId: "G-HDPSLJ18QK"
-};
-// Initialize Firebase
+}; // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 //Initialize Firestore
 const db = firebase.firestore();
-/*
-if (getCookie("self_authenticated") == "True") {} else {
-    document.cookie = "prevPage=profile_page"
-    window.location = "/sign_in");
+
+
+
+
+window.onload = function() {
+    console.log("Loaded")
 }
 
-*/
-//Defining variables that needs to be loaded
-var curprojID, name, salary_max, salary_min, smartStatus
-var clientInvoiced, clientName, due, managerContact, instructions, type, currentStatus, lastUpdatedBy;
+function setSearchQuery() {
+    var info = getCookie("user")
+    console.log(info)
 
 
-var userData = null,
-    userInformation = null;
-firebase.auth().onAuthStateChanged(firebaseUser => {
-    startLoading();
+}
+//This function takes cookies and decodes them to get the name
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return (c.substring(name.length, c.length)).toLowerCase();
+        }
+    }
+    return "";
+}
 
-    if (firebaseUser) {
-        userData = db.collection("employees").doc(firebaseUser.email);
-        userData.get().then(function(doc) {
-            if (doc.exists) {
-                role = (doc.get('emp_role'))
-                if (role != "Developer" || role != "Director") {
+function convertToFireBase(obj) {
+    const smartVal = semail;
+    db.collection('projects').doc(smartVal).set({
+            object: obj,
+        }).then(function() {
 
-                }
-                curprojID = (doc.get('cur_prj_id'));
-                name = (doc.get('name'));
-                salary_max = (doc.get('salary_pers_max'));
-                salary_min = (doc.get('salary_pers_min'));
-                smartStatus = (doc.get('status'));
+        })
+        .catch(function(error) {
 
-                userData = db.collection("projects").doc(curprojID);
+        });;
+}
+let Jobs = [];
+let fname, semail, photoUrl, uid, emailVerified;
+try {
+    var user = firebase.auth().currentUser;
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            if (user != null) {
+                fname = user.displayName;
+                semail = user.email;
+                photoUrl = user.photoURL;
+                emailVerified = user.emailVerified;
+                uid = user.uid;
+                console.log("User Signed IN")
+
+
+                const smartVal = semail
+                console.log(smartVal)
+                userData = db.collection("projects").doc(smartVal);
                 userData.get().then(function(doc) {
                     if (doc.exists) {
-
-                        clientInvoiced = (doc.get("ClientInvoiced"));
-                        clientName = (doc.get("ClientName"));
-                        due = (doc.get("DueDate"));
-                        managerContact = (doc.get("ManagerEmail"));
-                        instructions = (doc.get("ProjectInstructions"));
-                        type = (doc.get("ProjectType"));
-                        instructions = (doc.get("ProjectInstructions"));
-                        currentStatus = (doc.get("Status"));
-                        lastUpdatedBy = (doc.get("lastUpdatedBy"));
-
-
-                        //Load Data Into Page
-
-
-                        // One day Time in ms (milliseconds) 
-                        var one_day = 1000 * 60 * 60 * 24
-
-                        // To set present_dates to two variables 
-                        var today = new Date();
-                        var present_date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
-                        var finalDate = Date.parse(due);
-                        var Result = Math.round(finalDate - present_date) / (one_day);
-                        var Final_Result = Result.toFixed(0);
-
-                        salary_max = parseFloat(salary_max);
-                        salary_min = parseFloat(salary_min);
-                        var inbetween = salary_max - salary_min;
-                        inbetween = inbetween / 2;
-                        salary_min + inbetween;
-                        devPaycheck = salary_min / 100 * clientInvoiced;
-
-                        document.getElementById('user_display_name').innerHTML = 'Good Day ' + name;
-                        document.getElementById('dev_backlog_status').innerHTML = 'You Currently Have 1 Project Strictly Due On ' + due;
-                        document.getElementById('dev_compensation').innerHTML = "You Shall be Compensated R" + devPaycheck + " Exactly 1 Month After You Completed The Project, Should You Accept This Project.";
-                        document.getElementById('dev_instructions_before').innerHTML = "Project Instructions are as follows:<br\><br\>";
-                        document.getElementById('dev_instructions').innerHTML = "Project Type: " + type + "\n\n" + instructions + "\n\nThe manager that you should be in contact with throughout this project has the contact email of " + managerContact + "\n\n By Clicking the Accept button below, You agree to the Terms And Conditions You Signed";
-                        document.getElementById('dev_instructions').style.display = "inline";
-                        if (currentStatus == "Project Registered") {
-                            document.getElementById('quickVis01').style.display = "inline";
-                            document.getElementById('quickVis02').style.display = "inline";
-                        }
-
-
-
-
+                        Jobs = doc.get("object");
+                        loadTable(Jobs);
+                        setSearchQuery();
                         stopLoading();
                     } else {
-                        document.getElementById('user_display_name').innerHTML = 'Good Day ' + name;
-                        document.getElementById('dev_backlog_status').innerHTML = 'You Currently Have No Projects Assigned To Your Name.<br/><br/>Please Speak To A Manager If You Believe This Is A Mistake!';
+                        console.log("No such document!");
+                        //TODO NO INFO FOUND
                         stopLoading();
 
                     }
                 }).catch(function(error) {
-                    document.getElementById('user_display_name').innerHTML = 'Good Day ' + name;
-                    document.getElementById('dev_backlog_status').innerHTML = 'You Currently Have No Projects Assigned To Your Name.<br/><br/>Please Speak To A Manager If You Believe This Is A Mistake!';
+                    console.log("Error getting document:", error);
+                    //TODO NO INFO FOUND
+
                     stopLoading();
 
                 });
-            } else {
-                //    alert("Redirecting ERR - " + "Not Authenticated")
-                document.location = "index.html"
             }
-            stopLoading();
+        } else {
+            console.log("No User Signed In")
+        }
+    });
+} catch (exception) {
+    console.log(exception)
+        //TODO NO INFO FOUND
 
-        }).catch(function(error) {
-            document.getElementById('user_display_name').innerHTML = 'Good Day ' + name;
-            document.getElementById('dev_backlog_status').innerHTML = 'You Currently Have No Projects Assigned To Your Name.<br/><br/>Please Speak To A Manager If You Believe This Is A Mistake!';
-            stopLoading();
+}
 
-        });
+let sumMonth = 0;
+
+function loadTable(streamData) {
+    convertToFireBase(streamData);
+    let PredictionMonths = [];
+    for (var x = 0; x < streamData.length; x++) {
+        PredictionMonths.push((streamData[x]))
+    }
+    if (streamData.length > 0) {
+        setSearchQuery();
+    }
+    console.log(PredictionMonths)
+    let table = document.getElementById("mainTable");
+    table.innerHTML = "<tr><th>Project ID</th><th>Project Type</th><th>Description</th><th>Status</th><th>Client Email</th><th> Payout </th> <th>Due Date</th><th>Update Status</th></tr>";
+    for (var i = 0; i < PredictionMonths.length; i++) {
+        table.innerHTML += "<tr><td>" + PredictionMonths[i].ProjectID + "</td><td>" + PredictionMonths[i].ProjectType + "</td><td>" + PredictionMonths[i].ProjectInstructions + "</td><td>" + PredictionMonths[i].Status + "</td><td><button onclick=\"document.location=\'mailto:" + PredictionMonths[i].ClientEmail + "\'\">" + "Send Mail To Client" + "</a></td><td>R" + (0.7 * PredictionMonths[i].ClientInvoiced).toFixed(2) + "</td><td>" + PredictionMonths[i].DueDate + "</td><td><button onclick=\"updateSatus(" + PredictionMonths[i].ProjectID + ")\">Update Project Status</button></th></tr>";
+        sumMonth += (0.7 * PredictionMonths[i].ClientInvoiced)
+    }
+    document.getElementById("user_display_name").innerHTML = "Due To You This Month: R" + sumMonth.toFixed(2)
+}
+
+
+
+function updateSatus(id) {
+    for (var i = 0;)
+}
+
+function AddProject() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    var projID = "blank"
+    projID = document.getElementById("project_ID").value
+    var developer = document.getElementById("project_developer_email").value
+    var manager = document.getElementById("project_manager_email").value
+    var projectType = "Website"
+    var reference = document.getElementById("project_reference_email").value
+    var clientName = document.getElementById("project_client_name").value
+    var clientEmail = document.getElementById("project_client_email").value
+    var clientInvoiced = document.getElementById("project_client_invoiced").value
+    var projectStatus = "Project Registered"
+    var instructions = document.getElementById("project_instructions").value
+    var dueDate = document.getElementById("project_due_date").value
+    today = mm + '/' + dd + '/' + yyyy;
+
+    if (projID == "" || projID.length <= 7 || developer == "" || manager == "" || reference == "" || clientName == "" || clientEmail == "" || clientInvoiced == "" || projectStatus == "" || instructions == "" || dueDate == "") {
+        alert("Please make sure all info is filled in correctly")
     } else {
-        //    alert("Redirecting ERR - Not logged in")
-        document.cookie = "self_authenticated=False"
-        document.cookie = "prevPage=profile_page"
-        document.location = "index.html"
+
+        Jobs.push({
+            ProjectID: projID,
+            ProjectType: projectType,
+            DeveloperEmail: developer,
+            ManagerEmail: manager,
+            ReferenceEmail: reference,
+            ClientName: clientName,
+            ClientEmail: clientEmail,
+            ClientInvoiced: clientInvoiced,
+            Status: projectStatus,
+            ProjectInstructions: instructions,
+            DueDate: dueDate,
+        })
+        loadTable(Jobs)
     }
 
 
-    //Loading Data
-});
-
-
-function arrayToString(array) {
-    return array.toString().split(",").join("\n");
 }
+const genRandom = document.getElementById("auto_generate");
+genRandom.addEventListener('click', e => {
 
-function loadDataIntoPage() {
-
-
-}
-const signoutbtn = document.getElementById("sign_out_user");
-signoutbtn.addEventListener('click', e => {
-    firebase.auth().signOut().then(function() {
-        window.location = 'index.html';
-        // console.log("Signed Out")
-    }).catch(function(error) {
-        // alert.window.log("Could Not Sign You Out")
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
+    uuid = uuid.substr(0, 8);
+    document.getElementById("project_ID").value = uuid;
+
 });
 
-
-
-stopLoading();
 
 function startLoading() {
     document.getElementById('loader').style.display = "block";
@@ -164,21 +199,4 @@ function stopLoading() {
     document.getElementById('loader').style.display = "none";
     document.getElementById('loading').style.display = "none";
     document.getElementById('overlay').style.display = "none";
-}
-
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
 }
