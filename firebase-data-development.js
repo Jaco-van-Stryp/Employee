@@ -307,3 +307,17 @@ function stopLoading() {
     document.getElementById('loading').style.display = "none";
     document.getElementById('overlay').style.display = "none";
 }
+
+/*
+<style>
+
+</style>
+<section>
+<p style="text-align: left;">Good Day {{to_name}},</p>
+<p style="text-align: left;">We trust all is well!</p>
+<p style="text-align: left;">{{message}}</p>
+<p style="text-align: left;">If you have any other questions, feel free to reply to this email and we'll gladly help!</p>
+<p style="text-align: left;">Best wishes,<br />www.jaxifysoftware.com</p>
+
+</section>
+*/
