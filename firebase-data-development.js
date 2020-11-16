@@ -54,7 +54,8 @@ function convertToFireBase(obj) {
         })
         .catch(function(error) {
 
-        });;
+        });
+    loadTable(obj)
 }
 let Jobs = [];
 let fname, semail, photoUrl, uid, emailVerified;
@@ -108,7 +109,9 @@ try {
 let sumMonth = 0;
 
 function loadTable(streamData) {
-    convertToFireBase(streamData);
+    var d = new Date();
+
+    sumMonth = 0;
     let PredictionMonths = [];
     for (var x = 0; x < streamData.length; x++) {
         PredictionMonths.push((streamData[x]))
@@ -118,18 +121,70 @@ function loadTable(streamData) {
     }
     console.log(PredictionMonths)
     let table = document.getElementById("mainTable");
-    table.innerHTML = "<tr><th>Project ID</th><th>Project Type</th><th>Description</th><th>Status</th><th>Client Email</th><th> Payout </th> <th>Due Date</th><th>Update Status</th></tr>";
+    table.innerHTML = "<tr><th>Date Started</th><th>Project Type</th><th>Description</th><th>Status</th><th>Client Email</th><th> Payout </th> <th>Due Date</th><th>View Invoice</th><th>Update Status</th><th>Delete Project</th></tr>";
     for (var i = 0; i < PredictionMonths.length; i++) {
-        table.innerHTML += "<tr><td>" + PredictionMonths[i].ProjectID + "</td><td>" + PredictionMonths[i].ProjectType + "</td><td>" + PredictionMonths[i].ProjectInstructions + "</td><td>" + PredictionMonths[i].Status + "</td><td><button onclick=\"document.location=\'mailto:" + PredictionMonths[i].ClientEmail + "\'\">" + "Send Mail To Client" + "</a></td><td>R" + (0.7 * PredictionMonths[i].ClientInvoiced).toFixed(2) + "</td><td>" + PredictionMonths[i].DueDate + "</td><td><button onclick=\"updateSatus(" + PredictionMonths[i].ProjectID + ")\">Update Project Status</button></th></tr>";
-        sumMonth += (0.7 * PredictionMonths[i].ClientInvoiced)
+
+        if (PredictionMonths[i].Status == "Website Completed") {
+            const date1 = new Date(PredictionMonths[i].DateCompleted);
+            const d = new Date();
+            if (date1.getFullYear() != d.getFullYear() || date1.getMonth() != d.getMonth() || date1.getDay() > 25) {
+
+            } else {
+                table.innerHTML += "<tr><td>" + PredictionMonths[i].DateStarted + "</td><td>" + PredictionMonths[i].ProjectType + "</td><td>" + PredictionMonths[i].ProjectInstructions + "</td><td>" + PredictionMonths[i].Status + "</td><td><button onclick=\"document.location=\'mailto:" + PredictionMonths[i].ClientEmail + "\'\">" + "Send Mail To Client" + "</a></td><td>R" + (0.7 * PredictionMonths[i].ClientInvoiced).toFixed(2) + "</td><td>" + PredictionMonths[i].DueDate + "</td><td><button onclick=\"document.location=\'https://" + PredictionMonths[i].WaveURL + "\'\">View Invoice</button></td><td><button onclick=\"updateStatus('" + PredictionMonths[i].ProjectID + "')\">Update Project Status</button></td><td><button onclick=\"delProject(\'" + PredictionMonths[i].ProjectID + "\')\">Delete Project</button></td></tr>";
+                if (PredictionMonths[i].Status == "Website Completed") {
+                    sumMonth += (0.7 * PredictionMonths[i].ClientInvoiced)
+                }
+            }
+        } else {
+            table.innerHTML += "<tr><td>" + PredictionMonths[i].DateStarted + "</td><td>" + PredictionMonths[i].ProjectType + "</td><td>" + PredictionMonths[i].ProjectInstructions + "</td><td>" + PredictionMonths[i].Status + "</td><td><button onclick=\"document.location=\'mailto:" + PredictionMonths[i].ClientEmail + "\'\">" + "Send Mail To Client" + "</a></td><td>R" + (0.7 * PredictionMonths[i].ClientInvoiced).toFixed(2) + "</td><td>" + PredictionMonths[i].DueDate + "</td><td><button onclick=\"document.location=\'https://" + PredictionMonths[i].WaveURL + "\'\">View Invoice</button></td><td><button onclick=\"updateStatus('" + PredictionMonths[i].ProjectID + "')\">Update Project Status</button></td><td><button onclick=\"delProject(\'" + PredictionMonths[i].ProjectID + "\')\">Delete Project</button></td></tr>";
+
+            if (PredictionMonths[i].Status == "Website Completed") {
+                sumMonth += (0.7 * PredictionMonths[i].ClientInvoiced)
+            }
+        }
+
     }
     document.getElementById("user_display_name").innerHTML = "Due To You This Month: R" + sumMonth.toFixed(2)
 }
 
 
+function delProject(id) {
+    for (var i = 0; i < Jobs.length; i++) {
+        if (Jobs[i].ProjectID == id) {
+            Jobs.splice(Jobs[i])
+        }
+        convertToFireBase(Jobs);
+    }
+}
 
-function updateSatus(id) {
-    for (var i = 0;)
+function updateStatus(id) {
+    startLoading();
+    console.log(id)
+    for (var i = 0; i < Jobs.length; i++) {
+        if (Jobs[i].ProjectID == id) {
+            let status = Jobs[i].Status;
+            console.log("CHANGING STATUS")
+            if (status == "Project Registered") {
+                Jobs[i].Status = "Client Invoiced";
+            } else if (status == "Client Invoiced") {
+                Jobs[i].Status = "Client Paid";
+            } else if (status == "Client Paid") {
+                Jobs[i].Status = "Domain Purchased";
+            } else if (status == "Domain Purchased") {
+                Jobs[i].Status = "DNS A Record / Nameservers Changed To BlueHost";
+            } else if (status == "DNS A Record / Nameservers Changed To BlueHost") {
+                Jobs[i].Status = "Website Work Started";
+            } else if (status == "Website Work Started") {
+                Jobs[i].Status = "Website Completed";
+                let d = new Date;
+                Jobs[i].DateCompleted = d.getDate();
+            }
+            convertToFireBase(Jobs);
+
+        }
+        stopLoading();
+
+    }
 }
 
 function AddProject() {
@@ -150,12 +205,16 @@ function AddProject() {
     var projectStatus = "Project Registered"
     var instructions = document.getElementById("project_instructions").value
     var dueDate = document.getElementById("project_due_date").value
+    var wave = document.getElementById("invoice_URL").value
+
     today = mm + '/' + dd + '/' + yyyy;
 
     if (projID == "" || projID.length <= 7 || developer == "" || manager == "" || reference == "" || clientName == "" || clientEmail == "" || clientInvoiced == "" || projectStatus == "" || instructions == "" || dueDate == "") {
         alert("Please make sure all info is filled in correctly")
     } else {
-
+        var d = new Date();
+        let sDate = d.getFullYear() + "/" + d.getMonth() + "/" + d.getDate();
+        console.log(sDate);
         Jobs.push({
             ProjectID: projID,
             ProjectType: projectType,
@@ -168,10 +227,14 @@ function AddProject() {
             Status: projectStatus,
             ProjectInstructions: instructions,
             DueDate: dueDate,
+            DateStarted: sDate,
+            DateCompleted: null,
+            WaveURL: wave,
         })
-        loadTable(Jobs)
-    }
+        convertToFireBase(Jobs);
 
+
+    }
 
 }
 const genRandom = document.getElementById("auto_generate");
