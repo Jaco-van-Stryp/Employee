@@ -25,8 +25,6 @@ window.onload = function() {
 function setSearchQuery() {
     var info = getCookie("user")
     console.log(info)
-
-
 }
 //This function takes cookies and decodes them to get the name
 function getCookie(cname) {
@@ -127,6 +125,9 @@ function loadTable(streamData) {
         if (PredictionMonths[i].Status == "Website Completed") {
             const date1 = new Date(PredictionMonths[i].DateCompleted);
             const d = new Date();
+            console.log(date1)
+            console.log(d)
+
             if (date1.getFullYear() != d.getFullYear() || date1.getMonth() != d.getMonth() || date1.getDay() > 25) {
 
             } else {
@@ -151,6 +152,7 @@ function loadTable(streamData) {
 function delProject(id) {
     for (var i = 0; i < Jobs.length; i++) {
         if (Jobs[i].ProjectID == id) {
+            sendMail(Jobs[i].ClientName, "We're sad to see you go! This is just an update to let you know that your website has been canceled, and will no longer be worked on. If you believe this is a mistake or would like to continue working with us, please let us know!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             Jobs.splice(Jobs[i])
         }
         convertToFireBase(Jobs);
@@ -166,18 +168,24 @@ function updateStatus(id) {
             console.log("CHANGING STATUS")
             if (status == "Project Registered") {
                 Jobs[i].Status = "Client Invoiced";
+                sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've sent you an invoice for your website: " + Jobs[i].Domain + "! It can be viewed here - " + Jobs[i].WaveURL + "\nOnce We Receive Payment, you'll receive a notification!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+
             } else if (status == "Client Invoiced") {
                 Jobs[i].Status = "Client Paid";
+                sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             } else if (status == "Client Paid") {
                 Jobs[i].Status = "Domain Purchased";
+                sendMail(Jobs[i].ClientName, "We just wanted to let you know that your domain:" + Jobs[i].Domain + " has been reserved as yours, we will begin the process of linking it to your website!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             } else if (status == "Domain Purchased") {
                 Jobs[i].Status = "DNS A Record / Nameservers Changed To BlueHost";
             } else if (status == "DNS A Record / Nameservers Changed To BlueHost") {
                 Jobs[i].Status = "Website Work Started";
+                sendMail(Jobs[i].ClientName, "We just wanted to let you know that your website domain " + Jobs[i].Domain + " is now live on the public internet, we're still building your website and will let you know when everything is completed!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             } else if (status == "Website Work Started") {
                 Jobs[i].Status = "Website Completed";
+                sendMail(Jobs[i].ClientName, "We have Great News! Your website " + Jobs[i].Domain + " is all completed and ready for you and your customers to use! Should you have any questions or want anything to change, please feel free to reply to this email! Should you want a course on maintaining your own website, we explain everything in detail here on how to manage, maintain and build your own pages! - https://www.jaxifysoftware.com/shop/course/ - To sign into the dashboard of your website, please use the following address " + Jobs[i].Domain + "/wp-admin - You'll click on forgot password, and reset it with your email account. It was really nice working with you!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
                 let d = new Date;
-                Jobs[i].DateCompleted = d.getVarDate();
+                Jobs[i].DateCompleted = d;
             }
             convertToFireBase(Jobs);
 
@@ -185,6 +193,17 @@ function updateStatus(id) {
         stopLoading();
 
     }
+}
+
+function sendMail(client, Themessage, emailAddress, devEmail) {
+    emailjs.send("service_2hqig97", "template_7u9h78e", {
+        from_name: "Jaxify Software",
+        to_name: client,
+        message: Themessage,
+        email: emailAddress,
+        reply_to: devEmail,
+    });
+
 }
 
 function AddProject() {
@@ -245,7 +264,7 @@ function AddProject() {
         convertToFireBase(Jobs);
         window.scrollTo(0, 0);
         alert("New Project Added Successfully")
-
+        sendMail(clientName, "We just wanted to let you know that we've started work on your website: " + address + "! We will keep you updated at all times. We Estimate your website will be completed on " + dueDate, clientEmail + " or earlier!", developer);
 
     }
 
@@ -264,6 +283,18 @@ genRandom.addEventListener('click', e => {
 
 });
 
+
+function startLoading() {
+    document.getElementById('loader').style.display = "block";
+    document.getElementById('loading').style.display = "block";
+    document.getElementById('overlay').style.display = "block";
+}
+
+function stopLoading() {
+    document.getElementById('loader').style.display = "none";
+    document.getElementById('loading').style.display = "none";
+    document.getElementById('overlay').style.display = "none";
+}
 
 function startLoading() {
     document.getElementById('loader').style.display = "block";
