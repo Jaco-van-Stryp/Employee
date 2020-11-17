@@ -63,6 +63,7 @@
         })
         //Creating new employee
     hireEmp.addEventListener('click', e => {
+
         startLoading();
         const email = document.getElementById("emp_email").value;
         const password = document.getElementById('emp_password').value;
@@ -82,6 +83,8 @@
         var yyyy = today.getFullYear();
 
         today = mm + '/' + dd + '/' + yyyy;
+        sendMail(name + " " + surname, "Welcome To The Jaxify Software Team! Please Use The Following Login Information To Access Your Employee Dashboard: Email: " + email + " Password: " + password + " - You can use the following link to access this dashboard: employee.jaxifysoftware.com", email, "jaxifybusiness@gmail.com")
+
         db.collection("employees").doc(email).set({
                 id: employee_ID,
                 email: email,
@@ -121,9 +124,7 @@
 
                 db.collection('projects').doc(email).set({
                         object: [],
-                    }).then(function() {
-                        sendMail(name + " " + surname, "Welcome To The Jaxify Software Team! Please Use The Following Login Information To Access Your Employee Dashboard: Email: " + email + " Password: " + password + " - You can use the following link to access this dashboard: employee.jaxifysoftware.com", email, "jaxifybusiness@gmail.com")
-                    })
+                    }).then(function() {})
                     .catch(function(error) {
 
                     });
