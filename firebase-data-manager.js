@@ -107,19 +107,52 @@
 
                 });
 
-                firebase.auth().signOut().then(function() {
-                    // window.location.replace("https://employee.jaxifysoftware.com");
-                }).catch(function(error) {});
+
             })
             .catch(function(error) {
 
             });
 
+        db.collection("emp_data").doc("emps").update({
+
+                Employees: firebase.firestore.FieldValue.arrayUnion(email),
+
+            }).then(function() {
+
+                db.collection('projects').doc(email).set({
+                        object: [],
+                    }).then(function() {
+                        sendMail(name + " " + surname, "Welcome To The Jaxify Software Team! Please Use The Following Login Information To Access Your Employee Dashboard: Email: " + email + " Password: " + password + " - You can use the following link to access this dashboard: employee.jaxifysoftware.com", email, "jaxifybusiness@gmail.com")
+                    })
+                    .catch(function(error) {
+
+                    });
+
+                //    firebase.auth().signOut().then(function() {
+                // window.location.replace("https://employee.jaxifysoftware.com");
+                //     }).catch(function(error) {});
+            })
+            .catch(function(error) {
+
+            });
         stopLoading();
 
 
     });
 }());
+
+
+function sendMail(client, Themessage, emailAddress, devEmail) {
+    emailjs.send("service_2hqig97", "template_7u9h78e", {
+        from_name: "Onboarding - Jaxify Software",
+        to_name: client,
+        message: Themessage,
+        email: emailAddress,
+        reply_to: devEmail,
+    });
+
+}
+
 
 const signoutbtn = document.getElementById("sign_out_user");
 signoutbtn.addEventListener('click', e => {

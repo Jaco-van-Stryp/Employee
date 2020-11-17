@@ -20,11 +20,22 @@ const db = firebase.firestore();
 
 window.onload = function() {
     startLoading();
-    console.log("Loaded")
-    AddProject("jacovanstryp@gmail.com")
-        //AddProject("tanyaduplessis2000@gmail.com")
-        //AddProject("rubendupisanie@gmail.com")
-    stopLoading();
+    let temp = [];
+    userData = db.collection("emp_data").doc("emps");
+    userData.get().then(function(doc) {
+        if (doc.exists) {
+            temp = doc.get("Employees");
+
+            stopLoading();
+        } else {
+            console.log("No such document!");
+            stopLoading();
+        }
+        for (var i = 0; i < temp.length; i++) {
+            AddProject(temp[i])
+        }
+        stopLoading();
+    })
 }
 
 function setSearchQuery() {
