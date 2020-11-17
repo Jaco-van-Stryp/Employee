@@ -96,6 +96,8 @@ try {
             }
         } else {
             console.log("No User Signed In")
+            document.location = "./index.html"
+
         }
     });
 } catch (exception) {
@@ -119,7 +121,7 @@ function loadTable(streamData) {
     }
     console.log(PredictionMonths)
     let table = document.getElementById("mainTable");
-    table.innerHTML = "<tr><th>Date Started</th><th>Project Type</th><th>Description</th><th>Status</th><th>Client Email</th><th> Payout </th> <th>Due Date</th><th>View Invoice</th><th>Update Status</th><th>Delete Project</th><th>Edit Website</th></tr>";
+    table.innerHTML = "<tr><th>Date Started</th><th>Project Type</th><th>Client Name</th><th>Status</th><th>Client Email</th><th> Payout </th> <th>Due Date</th><th>View Invoice</th><th>Update Status</th><th>Cancel Project</th><th>Edit Website</th></tr>";
     for (var i = 0; i < PredictionMonths.length; i++) {
 
         if (PredictionMonths[i].Status == "Website Completed") {
@@ -131,13 +133,13 @@ function loadTable(streamData) {
             if (date1.getFullYear() != d.getFullYear() || date1.getMonth() != d.getMonth() || date1.getDay() > 25) {
 
             } else {
-                table.innerHTML += "<tr><td>" + PredictionMonths[i].DateStarted + "</td><td>" + PredictionMonths[i].ProjectType + "</td><td>" + PredictionMonths[i].ProjectInstructions + "</td><td>" + PredictionMonths[i].Status + "</td><td><button onclick=\"document.location=\'mailto:" + PredictionMonths[i].ClientEmail + "\'\">" + "Send Mail To Client" + "</a></td><td>R" + (0.7 * PredictionMonths[i].ClientInvoiced).toFixed(2) + "</td><td>" + PredictionMonths[i].DueDate + "</td><td><button onclick=\"document.location=\'" + PredictionMonths[i].WaveURL + "\'\">View Invoice</button></td><td><button onclick=\"updateStatus('" + PredictionMonths[i].ProjectID + "')\">Update Project Status</button></td><td><button style=\"background-color: red;\" onclick=\"delProject(\'" + PredictionMonths[i].ProjectID + "\')\">Delete Project</button></td><td><button style=\"background-color: purple;\" onclick=\"document.location=\'https://" + PredictionMonths[i].Domain + "/wp-admin\'\">Edit Website</button></td></tr>";
+                table.innerHTML += "<tr><td>" + PredictionMonths[i].DateStarted + "</td><td>" + PredictionMonths[i].ProjectType + "</td><td>" + PredictionMonths[i].ClientName + "</td><td>" + PredictionMonths[i].Status + "</td><td><button onclick=\"document.location=\'mailto:" + PredictionMonths[i].ClientEmail + "\'\">" + "Send Mail To Client" + "</a></td><td>R" + (0.7 * PredictionMonths[i].ClientInvoiced).toFixed(2) + "</td><td>" + PredictionMonths[i].DueDate + "</td><td><button onclick=\"document.location=\'" + PredictionMonths[i].WaveURL + "\'\">View Invoice</button></td><td><button onclick=\"updateStatus('" + PredictionMonths[i].ProjectID + "')\">" + getNextStatus(PredictionMonths[i].ProjectID) + "</button></td><td><button style=\"background-color: red;\" onclick=\"delProject(\'" + PredictionMonths[i].ProjectID + "\')\">Cancel Project</button></td><td><button style=\"background-color: purple;\" onclick=\"document.location=\'https://" + PredictionMonths[i].Domain + "/wp-admin\'\">Edit Website</button></td></tr>";
                 if (PredictionMonths[i].Status == "Website Completed") {
                     sumMonth += (0.7 * PredictionMonths[i].ClientInvoiced)
                 }
             }
         } else {
-            table.innerHTML += "<tr><td>" + PredictionMonths[i].DateStarted + "</td><td>" + PredictionMonths[i].ProjectType + "</td><td>" + PredictionMonths[i].ProjectInstructions + "</td><td>" + PredictionMonths[i].Status + "</td><td><button onclick=\"document.location=\'mailto:" + PredictionMonths[i].ClientEmail + "\'\">" + "Send Mail To Client" + "</a></td><td>R" + (0.7 * PredictionMonths[i].ClientInvoiced).toFixed(2) + "</td><td>" + PredictionMonths[i].DueDate + "</td><td><button onclick=\"document.location=\'" + PredictionMonths[i].WaveURL + "\'\">View Invoice</button></td><td><button onclick=\"updateStatus('" + PredictionMonths[i].ProjectID + "')\">Update Project Status</button></td><td><button style=\"background-color: red;\" onclick=\"delProject(\'" + PredictionMonths[i].ProjectID + "\')\">Delete Project</button></td><td><button style=\"background-color: purple;\" onclick=\"document.location=\'https://" + PredictionMonths[i].Domain + "/wp-admin\'\">Edit Website</button></td></tr>";
+            table.innerHTML += "<tr><td>" + PredictionMonths[i].DateStarted + "</td><td>" + PredictionMonths[i].ProjectType + "</td><td>" + PredictionMonths[i].ClientName + "</td><td>" + PredictionMonths[i].Status + "</td><td><button onclick=\"document.location=\'mailto:" + PredictionMonths[i].ClientEmail + "\'\">" + "Send Mail To Client" + "</a></td><td>R" + (0.7 * PredictionMonths[i].ClientInvoiced).toFixed(2) + "</td><td>" + PredictionMonths[i].DueDate + "</td><td><button onclick=\"document.location=\'" + PredictionMonths[i].WaveURL + "\'\">View Invoice</button></td><td><button onclick=\"updateStatus('" + PredictionMonths[i].ProjectID + "')\">" + getNextStatus(PredictionMonths[i].ProjectID) + "</button></td><td><button style=\"background-color: red;\" onclick=\"delProject(\'" + PredictionMonths[i].ProjectID + "\')\">Delete Project</button></td><td><button style=\"background-color: purple;\" onclick=\"document.location=\'https://" + PredictionMonths[i].Domain + "/wp-admin\'\">Edit Website</button></td></tr>";
 
             if (PredictionMonths[i].Status == "Website Completed") {
                 sumMonth += (0.7 * PredictionMonths[i].ClientInvoiced)
@@ -148,14 +150,40 @@ function loadTable(streamData) {
     document.getElementById("user_display_name").innerHTML = "Due To You This Month: R" + sumMonth.toFixed(2)
 }
 
+function signOut() {
+    firebase.auth().signOut();
+    document.location = "./index.html"
+}
 
 function delProject(id) {
     for (var i = 0; i < Jobs.length; i++) {
         if (Jobs[i].ProjectID == id) {
             sendMail(Jobs[i].ClientName, "We're sad to see you go! This is just an update to let you know that your website has been canceled, and will no longer be worked on. If you believe this is a mistake or would like to continue working with us, please let us know!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-            Jobs.splice(Jobs[i])
+            Jobs.splice(i)
         }
         convertToFireBase(Jobs);
+    }
+}
+
+
+function getNextStatus(id) {
+    for (var i = 0; i < Jobs.length; i++) {
+        if (Jobs[i].ProjectID == id) {
+            let status = Jobs[i].Status;
+            if (status == "Project Registered") {
+                return "Invoice Client";
+            } else if (status == "Client Invoiced") {
+                return "Mark As Paid";
+            } else if (status == "Client Paid") {
+                return "I've Purchased A Domain";
+            } else if (status == "Domain Purchased") {
+                return "I've Changed The DNS Records";
+            } else if (status == "DNS A Record / Nameservers Changed To BlueHost") {
+                return "I've Started Working On The Project";
+            } else if (status == "Website Work Started") {
+                return "I've Completed The Project";
+            } else return "Pending Payout..."
+        }
     }
 }
 
@@ -168,7 +196,7 @@ function updateStatus(id) {
             console.log("CHANGING STATUS")
             if (status == "Project Registered") {
                 Jobs[i].Status = "Client Invoiced";
-                sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've sent you an invoice for your website: " + Jobs[i].Domain + "! It can be viewed here - " + Jobs[i].WaveURL + "\nOnce We Receive Payment, you'll receive a notification!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+                //  sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've sent you an invoice for your website: " + Jobs[i].Domain + "! It can be viewed here - " + Jobs[i].WaveURL + "\nOnce We Receive Payment, you'll receive a notification!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
 
             } else if (status == "Client Invoiced") {
                 Jobs[i].Status = "Client Paid";
@@ -183,7 +211,7 @@ function updateStatus(id) {
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that your website domain " + Jobs[i].Domain + " is now live on the public internet, we're still building your website and will let you know when everything is completed!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             } else if (status == "Website Work Started") {
                 Jobs[i].Status = "Website Completed";
-                sendMail(Jobs[i].ClientName, "We have Great News! Your website " + Jobs[i].Domain + " is all completed and ready for you and your customers to use! Should you have any questions or want anything to change, please feel free to reply to this email! Should you want a course on maintaining your own website, we explain everything in detail here on how to manage, maintain and build your own pages! - https://www.jaxifysoftware.com/shop/course/ - To sign into the dashboard of your website, please use the following address " + Jobs[i].Domain + "/wp-admin - You'll click on forgot password, and reset it with your email account. It was really nice working with you!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+                sendMail(Jobs[i].ClientName, "We have Great News! Your website " + Jobs[i].Domain + " is all completed and ready for you and your customers to use! Should you want a course on maintaining your own website, we explain everything in detail here on how to manage, maintain and build your own pages! - https://www.jaxifysoftware.com/shop/course/ - To sign into the dashboard of your website, please use the following address " + Jobs[i].Domain + "/wp-admin - You'll click on forgot password, and reset it with your email account. It was really nice working with you, and we'd love it if you could review our services! - https://www.facebook.com/jaxifysoftware/reviews", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
                 let d = new Date;
                 Jobs[i].DateCompleted = d;
             }
@@ -206,6 +234,15 @@ function sendMail(client, Themessage, emailAddress, devEmail) {
 
 }
 
+function doesIDExist(id) {
+    for (var i = 0; i < Jobs.length; i++) {
+        if (Jobs[i].ProjectID == id) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function AddProject() {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -221,7 +258,7 @@ function AddProject() {
     var clientName = document.getElementById("project_client_name").value
     var clientEmail = document.getElementById("project_client_email").value
     var clientInvoiced = document.getElementById("project_client_invoiced").value
-    var projectStatus = "Project Registered"
+    var projectStatus = "Client Invoiced"
     var instructions = document.getElementById("project_instructions").value
     var dueDate = document.getElementById("project_due_date").value
     var wave = document.getElementById("invoice_URL").value
@@ -232,7 +269,7 @@ function AddProject() {
 
     if (projID == "" || projID.length <= 7 || developer == "" || clientName == "" || clientEmail == "" || clientInvoiced == "" || projectStatus == "" || instructions == "" || dueDate == "") {
         alert("Please make sure all info is filled in correctly")
-    } else {
+    } else if (doesIDExist(projID) == false) {
         var d = new Date();
         let sDate = d.getFullYear() + "/" + d.getMonth() + "/" + d.getDate();
         console.log(sDate);
@@ -263,11 +300,26 @@ function AddProject() {
 
         convertToFireBase(Jobs);
         window.scrollTo(0, 0);
-        alert("New Project Added Successfully")
 
-        sendMail(clientName, "We just wanted to let you know that we've started work on your website: " + address + "! We will keep you updated at all times. We Estimate your website will be completed on " + dueDate + " or earlier!", clientEmail, developer);
-        sendMail("Developer", "A new website project has been assigned to your name --> " + address + "! Please ensure you complete it before " + dueDate + " or earlier! Instructions are as follows:" + instructions + ". You will be paid: R" + (0.7 * clientInvoiced).toFixed(2) + " when the project is completed. Please view and update the project as you go via employee.jaxifysoftware.com", developer, "jaxifybusiness@gmail.com");
+        sendMail(clientName, "We just wanted to let you know that we've received your order for your website: " + address + "! We will keep you updated at all times ☺. We Estimate your website will be completed on " + dueDate + " or earlier! Before we can get started on reserving your domain name and building your website, we require you to make your invoiced payment of R" + (1 * clientInvoiced).toFixed(2) + ". Your Invoice can be found via this link - " + wave + " - To Make This Payment, you can go to www.jaxifysoftware.com/pay or view the bottom of the invoice for our banking details!", clientEmail, developer);
+        alert("New Project Added Successfully")
+        sendMail("Developer", "A new website project has been assigned to your name - " + address + "! Please ensure you complete it before " + dueDate + " or earlier! Instructions are as follows: " + instructions + ". You will be paid: R" + (0.7 * clientInvoiced).toFixed(2) + " when the project is completed. Please view and update the project as you go via employee.jaxifysoftware.com", developer, "jaxifybusiness@gmail.com ");
+
+    } else {
+        alert("This ID Already Exists!")
     }
+
+}
+
+function genR() {
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    uuid = uuid.substr(0, 8);
+    document.getElementById("project_ID").value = uuid;
 
 }
 const genRandom = document.getElementById("auto_generate");
