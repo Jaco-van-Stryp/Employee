@@ -126,6 +126,7 @@ function loadTable(streamData) {
 
         if (PredictionMonths[i].Status == "Website Completed") {
             const date1 = new Date(PredictionMonths[i].DateCompleted);
+
             const d = new Date();
             console.log(date1)
             console.log(d)
@@ -213,7 +214,8 @@ function updateStatus(id) {
                 Jobs[i].Status = "Website Completed";
                 sendMail(Jobs[i].ClientName, "We have Great News! Your website " + Jobs[i].Domain + " is all completed and ready for you and your customers to use! Should you want a course on maintaining your own website, we explain everything in detail here on how to manage, maintain and build your own pages! - https://www.jaxifysoftware.com/shop/course/ - To sign into the dashboard of your website, please use the following address " + Jobs[i].Domain + "/wp-admin - You'll click on forgot password, and reset it with your email account. It was really nice working with you, and we'd love it if you could review our services! - https://www.facebook.com/jaxifysoftware/reviews", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
                 let d = new Date;
-                Jobs[i].DateCompleted = d;
+
+                Jobs[i].DateCompleted = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
             }
             convertToFireBase(Jobs);
 
