@@ -115,6 +115,7 @@ function doesIDExist(id) {
     }
     return false;
 }
+let EmployeeManagementSystemExtra = 0;
 
 function AddProject(UserPushEmail) {
     let push = false;
@@ -134,6 +135,7 @@ function AddProject(UserPushEmail) {
         }
         let total = 0;
         let sumPayout = 0;
+
         for (var i = 0; i < tempObj.length; i++) {
 
             const date1 = new Date(tempObj[i].DateCompleted);
@@ -144,6 +146,10 @@ function AddProject(UserPushEmail) {
             if (date1.getFullYear() == d.getFullYear() && date1.getMonth() == d.getMonth() && date1.getDay() <= 25) {
                 total++;
                 sumPayout += (0.7 * tempObj[i].ClientInvoiced)
+                EmployeeManagementSystemExtra += (0.1 * tempObj.ClientInvoiced)
+            }
+            if (UserPushEmail == "jacovanstryp@gmail.com") {
+                sumPayout = sumPayout + EmployeeManagementSystemExtra;
             }
         }
         if (push == true) {

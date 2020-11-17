@@ -157,13 +157,17 @@ function signOut() {
 }
 
 function delProject(id) {
-    for (var i = 0; i < Jobs.length; i++) {
-        if (Jobs[i].ProjectID == id) {
-            sendMail(Jobs[i].ClientName, "We're sad to see you go! This is just an update to let you know that your website has been canceled, and will no longer be worked on. If you believe this is a mistake or would like to continue working with us, please let us know!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-            Jobs.splice(i)
+    let conf = confirm("Are you sure you want to cancel this project?");
+    if (conf == true) {
+        for (var i = 0; i < Jobs.length; i++) {
+            if (Jobs[i].ProjectID == id) {
+                sendMail(Jobs[i].ClientName, "We're sad to see you go! This is just an update to let you know that your website has been canceled, and will no longer be worked on. If you believe this is a mistake or would like to continue working with us, please let us know!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+                Jobs.splice(i)
+            }
+            convertToFireBase(Jobs);
         }
-        convertToFireBase(Jobs);
     }
+
 }
 
 
@@ -180,7 +184,7 @@ function getNextStatus(id) {
             } else if (status == "Domain Purchased") {
                 return "I've Changed The DNS Records";
             } else if (status == "DNS A Record / Nameservers Changed To BlueHost") {
-                return "I've Started Working On The Project";
+                return "I'm Ready To Start Working On The Project";
             } else if (status == "Website Work Started") {
                 return "I've Completed The Project";
             } else return "Pending Payout..."
@@ -198,27 +202,39 @@ function updateStatus(id) {
             if (status == "Project Registered") {
                 Jobs[i].Status = "Client Invoiced";
                 //  sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've sent you an invoice for your website: " + Jobs[i].Domain + "! It can be viewed here - " + Jobs[i].WaveURL + "\nOnce We Receive Payment, you'll receive a notification!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-
             } else if (status == "Client Invoiced") {
                 Jobs[i].Status = "Client Paid";
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+                window.open("https://za.godaddy.com/domainsearch/find?checkAvail=1&domainToCheck=" + Jobs[i].Domain);
             } else if (status == "Client Paid") {
                 Jobs[i].Status = "Domain Purchased";
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that your domain:" + Jobs[i].Domain + " has been reserved as yours, we will begin the process of linking it to your website!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+                window.open("https://dcc.godaddy.com/manage/dns?domainName=" + Jobs[i].Domain)
+                alert("Change The Parked A Record To: 50.87.177.72")
+
             } else if (status == "Domain Purchased") {
                 Jobs[i].Status = "DNS A Record / Nameservers Changed To BlueHost";
+                window.open("https://my.bluehost.com/cgi/hosting/assign/" + Jobs[i].Domain)
+                let f = false;
+                while (f != true) {
+                    f = confirm("After the website ownership has been verified on bluehost,\nchange both the name servers to NS1.BLUEHOST.COM and NS2.BLUEHOST.COM")
+                }
+                window.open("https://dcc.godaddy.com/manage/dns?domainName=" + Jobs[i].Domain)
             } else if (status == "DNS A Record / Nameservers Changed To BlueHost") {
                 Jobs[i].Status = "Website Work Started";
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that your website domain " + Jobs[i].Domain + " is now live on the public internet, we're still building your website and will let you know when everything is completed!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+                window.open("https://my.bluehost.com/hosting/app/#/create/wordpress")
             } else if (status == "Website Work Started") {
                 Jobs[i].Status = "Website Completed";
                 sendMail(Jobs[i].ClientName, "We have Great News! Your website " + Jobs[i].Domain + " is all completed and ready for you and your customers to use! Should you want a course on maintaining your own website, we explain everything in detail here on how to manage, maintain and build your own pages! - https://www.jaxifysoftware.com/shop/course/ - To sign into the dashboard of your website, please use the following address " + Jobs[i].Domain + "/wp-admin - You'll click on forgot password, and reset it with your email account. It was really nice working with you, and we'd love it if you could review our services! - https://www.facebook.com/jaxifysoftware/reviews", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
                 let d = new Date;
+                Jobs[i].DateCompleted = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+                window.open("https://" + Jobs[i].Domain + "/wp-admin/user-new.php")
 
-                Jobs[i].DateCompleted = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+            } else {
+                alert("You've Completed This Project, You Will Be Compensated On The 25th");
             }
             convertToFireBase(Jobs);
-
         }
         stopLoading();
 
@@ -233,7 +249,6 @@ function sendMail(client, Themessage, emailAddress, devEmail) {
         email: emailAddress,
         reply_to: devEmail,
     });
-
 }
 
 function doesIDExist(id) {
@@ -273,7 +288,7 @@ function AddProject() {
         alert("Please make sure all info is filled in correctly")
     } else if (doesIDExist(projID) == false) {
         var d = new Date();
-        let sDate = d.getFullYear() + "/" + d.getMonth() + "/" + d.getDate();
+        let sDate = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
         console.log(sDate);
         Jobs.push({
             ProjectID: projID,

@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     <link rel="shortcut icon" type="image/png" href="Resources/favicon.png" />
 
@@ -17,10 +16,8 @@
     <!-- Add Firebase products that you want to use -->
     <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-firestore.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js">
-    </script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js">
-    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
             emailjs.init("user_ktFqvqMWx5M9Ik4j56wV1");
@@ -89,9 +86,8 @@
                         <br />
                         <label for="pwd">Project Type</label>
                         <br />
-                        <button class="btn btn-success">Website</button>
-                        <button class="btn btn-danger">Desktop</button>
-                        <button class="btn btn-danger">Mobile</button>
+                        <button class="btn btn-success">Website + Hosting</button>
+                        <button class="btn btn-danger">Custom Email Only Hosting</button>
                         <br />
 
                         <br />
@@ -120,6 +116,10 @@
                         <input type="number" class="fronttext w-50" placeholder="Client Invoice Amount" id="project_client_invoiced" />
                         <br />
                         <br />
+                        <button onclick="window.open('https://next.waveapps.com/a17ba602-3746-4bc0-b974-4168e24e7ae9/invoices/add')">
+                Setup Invoice Now
+              </button>
+                        <br /><br />
                         <label for="pwd">Wave Invoice URL</label>
                         <br />
 
@@ -134,6 +134,7 @@
                         <label for="pwd">Due Date</label>
                         <br />
                         <input type="date" class="fronttext w-50" placeholder="Due Date" id="project_due_date" />
+
                         <br /><br />
                         <label for="pwd">Reserved Domain Name</label>
                         <br />
