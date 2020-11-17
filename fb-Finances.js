@@ -16,7 +16,7 @@ firebase.analytics();
 const db = firebase.firestore();
 
 
-
+let AllEmployees = []
 
 window.onload = function() {
     startLoading();
@@ -25,22 +25,25 @@ window.onload = function() {
     userData.get().then(function(doc) {
         if (doc.exists) {
             temp = doc.get("Employees");
-
-            stopLoading();
+            AllEmployees = temp;
+            getPersOfTotal(0.1, AllEmployees);
         } else {
-            console.log("No such document!");
             stopLoading();
         }
-        for (var i = 0; i < temp.length; i++) {
-            AddProject(temp[i])
-        }
-        stopLoading();
+
     })
+}
+
+function loadProfiles() {
+    for (var i = 0; i < AllEmployees.length; i++) {
+        AddProject(AllEmployees[i]);
+    }
+    stopLoading();
+
 }
 
 function setSearchQuery() {
     var info = getCookie("user")
-    console.log(info)
 }
 //This function takes cookies and decodes them to get the name
 function getCookie(cname) {
@@ -75,7 +78,6 @@ function loadTable(streamData) {
     if (streamData.length > 0) {
         setSearchQuery();
     }
-    console.log(PredictionMonths)
     let table = document.getElementById("mainTable");
     table.innerHTML = "<tr><th>Employee Email</th><th>Total Projects Completed</th><th>Payout Due</th><th>Confirm Payment</th></tr>";
     for (var i = 0; i < PredictionMonths.length; i++) {
@@ -115,9 +117,41 @@ function doesIDExist(id) {
     }
     return false;
 }
-let EmployeeManagementSystemExtra = 0;
+let final = 0;
+
+function getPersOfTotal(pers, bigObj) {
+    let tempObj = [];
+    let next = false;
+    let counter = 0;
+    for (var i = 0; i < bigObj.length; i++) {
+        userData = db.collection("projects").doc(bigObj[i]);
+        userData.get().then(function(doc) {
+            if (doc.exists) {
+                tempObj = doc.get("object");
+                if (tempObj.length >= 1) {
+                    for (var x = 0; x < tempObj.length; x++) {
+                        final = final + (pers * tempObj[x].ClientInvoiced)
+                    }
+                }
+                stopLoading();
+            } else {
+                stopLoading();
+            }
+        }).then(function(data) {
+            counter++;
+            if (counter == bigObj.length) {
+                loadProfiles();
+            }
+        })
+
+    }
+
+
+
+}
 
 function AddProject(UserPushEmail) {
+    let EmployeeManagementSystemExtra = 0;
     let push = false;
     let tempObj = [];
     let userData;
@@ -126,11 +160,9 @@ function AddProject(UserPushEmail) {
         if (doc.exists) {
             tempObj = doc.get("object");
 
-            console.log(tempObj);
             push = true;
             stopLoading();
         } else {
-            console.log("No such document!");
             stopLoading();
         }
         let total = 0;
@@ -140,18 +172,19 @@ function AddProject(UserPushEmail) {
 
             const date1 = new Date(tempObj[i].DateCompleted);
             const d = new Date();
-            console.log("D1 " + date1)
-            console.log("D2 " + d)
+
 
             if (date1.getFullYear() == d.getFullYear() && date1.getMonth() == d.getMonth() && date1.getDay() <= 25) {
                 total++;
                 sumPayout += (0.7 * tempObj[i].ClientInvoiced)
-                EmployeeManagementSystemExtra += (0.1 * tempObj.ClientInvoiced)
             }
-            if (UserPushEmail == "jacovanstryp@gmail.com") {
-                sumPayout = sumPayout + EmployeeManagementSystemExtra;
-            }
+
         }
+        if (UserPushEmail == "jacovanstryp@gmail.com") {
+            sumPayout += final;
+        }
+
+
         if (push == true) {
             Employees.push({
                 EmpEmail: UserPushEmail,
@@ -162,6 +195,7 @@ function AddProject(UserPushEmail) {
         loadTable(Employees);
     })
 }
+
 stopLoading();
 
 function startLoading() {
