@@ -129,9 +129,9 @@
 
                     });
 
-                //    firebase.auth().signOut().then(function() {
-                // window.location.replace("https://employee.jaxifysoftware.com");
-                //     }).catch(function(error) {});
+                firebase.auth().signOut().then(function() {
+                    //     window.location.replace("https://employee.jaxifysoftware.com");
+                }).catch(function(error) {});
             })
             .catch(function(error) {
 
