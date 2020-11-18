@@ -283,10 +283,9 @@ function AddProject() {
     var clientName = document.getElementById("project_client_name").value
     var clientEmail = document.getElementById("project_client_email").value
     var clientInvoiced = document.getElementById("project_client_invoiced").value
-    var projectStatus = "Client Invoiced"
+    var projectStatus = "Pending Approval"
     var instructions = document.getElementById("project_instructions").value
     var dueDate = document.getElementById("project_due_date").value
-    var wave = document.getElementById("invoice_URL").value
     var address = document.getElementById("domain").value
 
 
@@ -310,7 +309,7 @@ function AddProject() {
             DueDate: dueDate,
             DateStarted: sDate,
             DateCompleted: null,
-            WaveURL: wave,
+            WaveURL: "",
             Domain: address,
         })
         document.getElementById("project_ID").value = "";
@@ -320,15 +319,13 @@ function AddProject() {
         document.getElementById("project_client_invoiced").value = "";
         document.getElementById("project_instructions").value = "";
         document.getElementById("project_due_date").value = "";
-        document.getElementById("invoice_URL").value = "";
         document.getElementById("domain").value = "";
+        sendMail("Jaco van Stryp", "Project Approval Request - employee.jaxifysoftware.com/approve.html#" + projID + "&7@!" + developer, "jacovanstryp@gmail.com", developer);
 
         convertToFireBase(Jobs);
         window.scrollTo(0, 0);
 
-        sendMailFinance(clientName, "We just wanted to let you know that we've received your order for your website: " + address + "! We will keep you updated at all times. We Estimate your website will be completed on or before " + dueDate + "! Before we can get started on reserving your domain name and building your website, we require you to make your invoiced payment of R" + (1 * clientInvoiced).toFixed(2) + ". Your Invoice can be found via this link - " + wave + "", clientEmail, developer);
         alert("New Project Added Successfully")
-        sendMail("Developer", "A new website project has been assigned to your name - " + address + "! Please ensure you complete it before " + dueDate + " or earlier! Instructions are as follows: " + instructions + ". You will be paid: R" + (0.7 * clientInvoiced).toFixed(2) + " when the project is completed. Please view and update the project as you go via employee.jaxifysoftware.com", developer, "jaxifybusiness@gmail.com ");
 
     } else {
         alert("This ID Already Exists!")
@@ -349,7 +346,6 @@ function genR() {
 }
 const genRandom = document.getElementById("auto_generate");
 genRandom.addEventListener('click', e => {
-
     var dt = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (dt + Math.random() * 16) % 16 | 0;
@@ -358,7 +354,6 @@ genRandom.addEventListener('click', e => {
     });
     uuid = uuid.substr(0, 8);
     document.getElementById("project_ID").value = uuid;
-
 });
 
 

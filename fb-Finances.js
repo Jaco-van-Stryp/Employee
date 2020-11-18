@@ -180,7 +180,7 @@ function AddProject(UserPushEmail) {
             }
 
         }
-        if (UserPushEmail == "jacovanstryp@gmail.com") {
+        if (UserPushEmail == "jacovanstryp@gmail.com") { //This is compensation for development of this system & Setting Up Domains
             sumPayout += final;
         }
 
