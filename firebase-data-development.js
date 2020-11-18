@@ -180,7 +180,9 @@ function getNextStatus(id) {
             } else if (status == "Client Invoiced") {
                 return "Mark As Paid";
             } else if (status == "Client Paid") {
-                return "I've Purchased A Domain";
+                return "Request Domain Purchase";
+            } else if (status == "Pending Domain Purchase") {
+                return "";
             } else if (status == "Domain Purchased") {
                 return "I've Changed The DNS Records";
             } else if (status == "DNS A Record / Nameservers Changed To BlueHost") {
@@ -205,16 +207,16 @@ function updateStatus(id) {
             } else if (status == "Client Invoiced") {
                 Jobs[i].Status = "Client Paid";
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-                window.open("https://za.godaddy.com/domainsearch/find?checkAvail=1&domainToCheck=" + Jobs[i].Domain);
             } else if (status == "Client Paid") {
-                Jobs[i].Status = "Domain Purchased";
-                sendMail(Jobs[i].ClientName, "We just wanted to let you know that your domain:" + Jobs[i].Domain + " has been reserved as yours, we will begin the process of linking it to your website!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-                window.open("https://dcc.godaddy.com/manage/dns?domainName=" + Jobs[i].Domain)
-                alert("Change The Parked A Record To: 50.87.177.72")
+                // Jobs[i].Status = "Domain Purchased";
+                // sendMail(Jobs[i].ClientName, "We just wanted to let you know that your domain: " + Jobs[i].Domain + " has been reserved as yours, we will begin the process of linking it to your website!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
 
-            } else if (status == "Domain Purchased") {
-                Jobs[i].Status = "DNS A Record / Nameservers Changed To BlueHost";
-                window.open("https://my.bluehost.com/cgi/hosting/assign/" + Jobs[i].Domain)
+                //  
+                Jobs[i].Status = "Domain Purchase Request Forwarded To Manager";
+                sendMail("Jaco van Stryp", "Domain Purchase Request - employee.jaxifysoftware.com/purchase.html/" + Jobs[i].ProjectID + "&7@!" + Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com", Jobs[i].DeveloperEmail);
+                alert("Your Purchase Request has been forwarded to a manager!")
+            } else if (status == "Domain Approved") {
+                Jobs[i].Status = "Website Work Started";
                 let f = false;
                 while (f != true) {
                     f = confirm("After the website ownership has been verified on bluehost,\nchange both the name servers to NS1.BLUEHOST.COM and NS2.BLUEHOST.COM")
@@ -243,6 +245,16 @@ function updateStatus(id) {
 
 function sendMail(client, Themessage, emailAddress, devEmail) {
     emailjs.send("service_2hqig97", "template_7u9h78e", {
+        from_name: "Jaxify Software",
+        to_name: client,
+        message: Themessage,
+        email: emailAddress,
+        reply_to: devEmail,
+    });
+}
+
+function sendMailFinance(client, Themessage, emailAddress, devEmail) {
+    emailjs.send("service_2hqig97", "finance", {
         from_name: "Jaxify Software",
         to_name: client,
         message: Themessage,
@@ -318,7 +330,7 @@ function AddProject() {
         convertToFireBase(Jobs);
         window.scrollTo(0, 0);
 
-        sendMail(clientName, "We just wanted to let you know that we've received your order for your website: " + address + "! We will keep you updated at all times ☺. We Estimate your website will be completed on " + dueDate + " or earlier! Before we can get started on reserving your domain name and building your website, we require you to make your invoiced payment of R" + (1 * clientInvoiced).toFixed(2) + ". Your Invoice can be found via this link - " + wave + " - To Make This Payment, you can go to www.jaxifysoftware.com/pay or view the bottom of the invoice for our banking details!", clientEmail, developer);
+        sendMailFinance(clientName, "We just wanted to let you know that we've received your order for your website: " + address + "! We will keep you updated at all times. We Estimate your website will be completed on or before " + dueDate + "! Before we can get started on reserving your domain name and building your website, we require you to make your invoiced payment of R" + (1 * clientInvoiced).toFixed(2) + ". Your Invoice can be found via this link - " + wave + "", clientEmail, developer);
         alert("New Project Added Successfully")
         sendMail("Developer", "A new website project has been assigned to your name - " + address + "! Please ensure you complete it before " + dueDate + " or earlier! Instructions are as follows: " + instructions + ". You will be paid: R" + (0.7 * clientInvoiced).toFixed(2) + " when the project is completed. Please view and update the project as you go via employee.jaxifysoftware.com", developer, "jaxifybusiness@gmail.com ");
 
