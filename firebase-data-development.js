@@ -325,7 +325,7 @@ function AddProject() {
         convertToFireBase(Jobs);
         window.scrollTo(0, 0);
 
-        alert("New Project Added Successfully")
+        alert("New Project Added Successfully\nYour project has been forwarded to a manager so they can add an invoice. When The Client Pays, Please Update The Status Of The Project!")
 
     } else {
         alert("This ID Already Exists!")
