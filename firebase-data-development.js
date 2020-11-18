@@ -213,7 +213,7 @@ function updateStatus(id) {
 
                 //  
                 Jobs[i].Status = "Domain Purchase Request Forwarded To Manager";
-                sendMail("Jaco van Stryp", "Domain Purchase Request - employee.jaxifysoftware.com/purchase.html/" + Jobs[i].ProjectID + "&7@!" + Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com", Jobs[i].DeveloperEmail);
+                sendMail("Jaco van Stryp", "Domain Purchase Request - employee.jaxifysoftware.com/purchase.html#" + Jobs[i].ProjectID + "&7@!" + Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com", Jobs[i].DeveloperEmail);
                 alert("Your Purchase Request has been forwarded to a manager!")
             } else if (status == "Domain Approved") {
                 Jobs[i].Status = "Website Work Started";

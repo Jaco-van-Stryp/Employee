@@ -29,7 +29,7 @@ window.onload = function() {
         userData.get().then(function(doc) {
             if (doc.exists) {
                 Jobs = doc.get("object");
-                for (var x = 0; x < Jobs.length; Jobs++) {
+                for (var i = 0; i < Jobs.length; i++) {
                     if (Jobs[i].ProjectID == id) {
                         idIndex = i;
                         window.open("https://za.godaddy.com/domainsearch/find?checkAvail=1&domainToCheck=" + Jobs[i].Domain);
