@@ -31,40 +31,41 @@ window.onload = function() {
                 Jobs = doc.get("object");
                 for (var i = 0; i < Jobs.length; i++) {
                     if (Jobs[i].ProjectID == id) {
+                        alert("Set Up Domain - " + Jobs[i].Domain)
                         idIndex = i;
                         window.open("https://za.godaddy.com/domainsearch/find?checkAvail=1&domainToCheck=" + Jobs[i].Domain);
-                        let c = prompt("I've Purchased The Domain")
+                        let c = confirm("I've Purchased The Domain")
                         while (c != true) {
 
                         }
                         c = false;
                         window.open("https://dcc.godaddy.com/manage/dns?domainName=" + Jobs[i].Domain)
-                        c = prompt("I've Changed The A Record To 50.87.177.72")
+                        c = confirm("I've Changed The A Record To 50.87.177.72")
                         while (c != true) {
 
                         }
                         c = false;
                         window.open("https://my.bluehost.com/cgi/hosting/assign/" + Jobs[i].Domain)
-                        c = prompt("I've Assigned The Domain To BlueHost")
+                        c = confirm("I've Assigned The Domain To BlueHost")
                         while (c != true) {
 
                         }
                         c = false;
                         window.open("https://dcc.godaddy.com/manage/dns?domainName=" + Jobs[i].Domain)
-                        c = prompt("I've changed the name servers to NS1.BLUEHOST.COM and NS2.BLUEHOST.COM")
+                        c = confirm("I've changed the name servers to NS1.BLUEHOST.COM and NS2.BLUEHOST.COM")
                         while (c != true) {
 
                         }
                         c = false;
                         window.open("https://my.bluehost.com/hosting/app/#/create/wordpress")
-                        c = prompt("I've Created The Website")
+                        c = confirm("I've Created The Website")
                         while (c != true) {
 
                         }
                         c = false;
                         sendMail(Jobs[i].ClientName, "We just wanted to let you know that your website domain " + Jobs[i].Domain + " is now live on the public internet, we're still building your website and will let you know when everything is completed!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
                         window.open("https://" + Jobs[i].Domain + "/wp-admin/user-new.php")
-                        c = prompt("I've Added The Following User:\nUsername: " + Jobs[i].DeveloperEmail + "\nPassword: " + pass)
+                        c = confirm("I've Added The Following User:\nUsername: " + Jobs[i].DeveloperEmail + "\nPassword: " + pass)
                         while (c != true) {
 
                         }
