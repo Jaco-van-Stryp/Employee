@@ -181,7 +181,7 @@ function getNextStatus(id) {
                 return "Mark As Paid";
             } else if (status == "Client Paid") {
                 return "Request Domain Purchase";
-            } else if (status == "Pending Domain Purchase") {
+            } else if (status == "Domain Purchase Request Forwarded To Manager") {
                 return "";
             } else if (status == "Domain Purchased") {
                 return "I've Changed The DNS Records";
