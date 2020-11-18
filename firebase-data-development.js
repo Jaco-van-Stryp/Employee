@@ -189,7 +189,7 @@ function getNextStatus(id) {
                 return "I'm Ready To Start Working On The Project";
             } else if (status == "Website Work Started") {
                 return "I've Completed The Project";
-            } else return "Pending Payout..."
+            } else return ""
         }
     }
 }
@@ -208,10 +208,6 @@ function updateStatus(id) {
                 Jobs[i].Status = "Client Paid";
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             } else if (status == "Client Paid") {
-                // Jobs[i].Status = "Domain Purchased";
-                // sendMail(Jobs[i].ClientName, "We just wanted to let you know that your domain: " + Jobs[i].Domain + " has been reserved as yours, we will begin the process of linking it to your website!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-
-                //  
                 Jobs[i].Status = "Domain Purchase Request Forwarded To Manager";
                 sendMail("Jaco van Stryp", "Domain Purchase Request - employee.jaxifysoftware.com/purchase.html#" + Jobs[i].ProjectID + "&7@!" + Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com", Jobs[i].DeveloperEmail);
                 alert("Your Purchase Request has been forwarded to a manager!")
@@ -234,7 +230,7 @@ function updateStatus(id) {
                 window.open("https://" + Jobs[i].Domain + "/wp-admin/user-new.php")
 
             } else {
-                alert("You've Completed This Project, You Will Be Compensated On The 25th");
+
             }
             convertToFireBase(Jobs);
         }
