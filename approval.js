@@ -55,7 +55,6 @@ function approve() {
     if (document.getElementById("wave").value == "") {
         alert("Please enter a wave Invoice")
     } else {
-
         for (var i = 0; i < Jobs.length; i++) {
             if (Jobs[i].ProjectID == id) {
                 Jobs[i].Status = "Client Invoiced";
@@ -64,7 +63,7 @@ function approve() {
                         object: Jobs,
                     }).then(function() {
                         sendMailFinance(Jobs[i].ClientName, "We just wanted to let you know that we've received your order for your website: " + Jobs[i].Domain + "! We will keep you updated at all times. We Estimate your website will be completed on or before " + Jobs[i].DueDate + "! Before we can get started on reserving your domain name and building your website, we require you to make your invoiced payment of R" + (1 * Jobs[i].ClientInvoiced).toFixed(2) + ". Your Invoice can be found via this link - " + Jobs[i].WaveURL + "", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-                        sendMail("Developer", "Your Project - " + Jobs[i].Domain + " Has Been Approved. Please Visit employee.jaxifysoftware.com for further instructions", Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
+                        sendMail("Developer", "Your Project - " + Jobs[i].Domain + " Has Been Approved. Please Visit employee.jaxifysoftware.com for further instructions! If your client wants to see the invoice in a pdf format, you can download it here: " + Jobs[i].WaveURL + " - You are expected to finish this website before " + Jobs[i].DueDate, Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
                         alert("Project Approved")
                     })
                     .catch(function(error) {
