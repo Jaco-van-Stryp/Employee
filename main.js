@@ -2,7 +2,6 @@
 function storeSearchQuery(query) {
     var mainData = "user=" + query
     document.cookie = mainData;
-
 }
 
 function loginError(message) {
