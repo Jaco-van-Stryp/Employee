@@ -288,9 +288,7 @@ function AddProject() {
     var dueDate = document.getElementById("project_due_date").value
     var address = document.getElementById("domain").value
 
-
     today = mm + '/' + dd + '/' + yyyy;
-
     if (projID == "" || projID.length <= 7 || developer == "" || clientName == "" || clientEmail == "" || clientInvoiced == "" || projectStatus == "" || instructions == "" || dueDate == "") {
         alert("Please make sure all info is filled in correctly")
     } else if (doesIDExist(projID) == false) {
@@ -321,7 +319,6 @@ function AddProject() {
         document.getElementById("project_due_date").value = "";
         document.getElementById("domain").value = "";
         sendMail("Jaco van Stryp", "Project Approval Request - employee.jaxifysoftware.com/approve.html#" + projID + "&7@!" + developer, "jacovanstryp@gmail.com", developer);
-
         convertToFireBase(Jobs);
         window.scrollTo(0, 0);
 

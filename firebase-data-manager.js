@@ -36,17 +36,12 @@
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
                     document.location = 'index.html';
-
-
                 }
             }).catch(function(error) {
                 console.log("Error getting document:", error);
                 document.location = 'index.html';
-
-
             });
         } else {
-
             document.location = 'index.html';
             stopLoading();
         }
@@ -99,18 +94,13 @@
                 status: "Hired",
                 date_hired: today,
                 hired_by: fbuser,
-
             }).then(function() {
-
                 firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
                     // Handle Errors here.
                     var errorCode = error.code;
                     var errorMessage = error.message;
                     alert(errorMessage)
-
                 });
-
-
             })
             .catch(function(error) {
 
@@ -121,10 +111,11 @@
                 Employees: firebase.firestore.FieldValue.arrayUnion(email),
 
             }).then(function() {
-
                 db.collection('projects').doc(email).set({
                         object: [],
-                    }).then(function() {})
+                    }).then(function(data) {
+                        alert("Employee Hired Successfully")
+                    })
                     .catch(function(error) {
 
                     });

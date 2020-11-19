@@ -35,16 +35,13 @@ window.onload = function() {
 }
 
 function loadProfiles() {
-
     for (var i = 0; i < AllEmployees.length; i++) {
         AddProject(AllEmployees[i]);
     }
     let temp;
     console.log(Employees)
-
     loadTable(Employees);
     // stopLoading();
-
 }
 
 function setSearchQuery() {
@@ -162,15 +159,14 @@ function AddProject(UserPushEmail) {
     userData.get().then(function(doc) {
         if (doc.exists) {
             tempObj = doc.get("object");
-
             push = true;
-            //stopLoading();
         } else {
             Employees[0].PayoutDue = Employees[0].PayoutDue + (final / 2)
             console.log(Employees)
             loadTable(Employees)
             stopLoading();
         }
+
         let total = 0;
         let sumPayout = 0;
 
@@ -206,6 +202,8 @@ function AddProject(UserPushEmail) {
             }
         }
         loadTable(Employees);
+    }).then(function(data) {
+        stopLoading();
     })
 }
 
