@@ -10,22 +10,16 @@ function loginError(message) {
     newUser = false;
     if (message.includes("badly formatted")) {
         document.getElementById('signin_main_lable').innerHTML = "Please Follow The Appropriate Email Format<br>email@example.com"
-
     }
     if (message.includes("There is no user record corresponding to this identifier. The user may have been deleted.")) {
         document.getElementById('signin_main_lable').innerHTML = "Sorry, You are not an employee of Jaxify Software!"
-
     }
     if (message.includes("The password is invalid")) {
         document.getElementById('signin_main_lable').innerHTML = "Please Make Sure You Entered The Correct Email & Employee Code!"
-
     }
     if (message.includes("already in use")) {
         document.getElementById('signin_main_lable').innerHTML = "This Email Already Exists, Try Signing In!"
-
     }
-
-
 }
 (function() {
     // Our web app's Firebase configuration
@@ -138,8 +132,6 @@ function getCookie(cname) {
     }
     return "";
 }
-
-
 
 stopLoading();
 
