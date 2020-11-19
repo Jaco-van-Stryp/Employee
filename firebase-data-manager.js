@@ -107,29 +107,20 @@
             });
 
         db.collection("emp_data").doc("emps").update({
-
                 Employees: firebase.firestore.FieldValue.arrayUnion(email),
-
-            }).then(function() {
+            }).then(function(data) {
                 db.collection('projects').doc(email).set({
                         object: [],
                     }).then(function(data) {
                         alert("Employee Hired Successfully")
+                        firebase.auth().signOut().then(function() {
+                            //     window.location.replace("https://employee.jaxifysoftware.com");
+                        }).catch(function(error) {});
                     })
-                    .catch(function(error) {
-
-                    });
-
-                firebase.auth().signOut().then(function() {
-                    //     window.location.replace("https://employee.jaxifysoftware.com");
-                }).catch(function(error) {});
+                    .catch(function(error) {});
             })
-            .catch(function(error) {
-
-            });
+            .catch(function(error) {});
         stopLoading();
-
-
     });
 }());
 
@@ -142,7 +133,6 @@ function sendMail(client, Themessage, emailAddress, devEmail) {
         email: emailAddress,
         reply_to: devEmail,
     });
-
 }
 
 
