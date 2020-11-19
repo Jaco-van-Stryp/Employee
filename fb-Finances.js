@@ -35,10 +35,15 @@ window.onload = function() {
 }
 
 function loadProfiles() {
+
     for (var i = 0; i < AllEmployees.length; i++) {
         AddProject(AllEmployees[i]);
     }
-    stopLoading();
+    let temp;
+    console.log(Employees)
+
+    loadTable(Employees);
+    // stopLoading();
 
 }
 
@@ -86,7 +91,7 @@ function loadTable(streamData) {
         sumMonth += PredictionMonths[i].PayoutDue
         document.getElementById("user_display_name").innerHTML = "Payout Due This Month R" + sumMonth.toFixed(2)
     }
-    stopLoading();
+    // stopLoading();
 
 }
 
@@ -94,7 +99,6 @@ function signOut() {
     firebase.auth().signOut();
     document.location = "./index.html"
 }
-
 
 
 
@@ -133,9 +137,9 @@ function getPersOfTotal(pers, bigObj) {
                         final = final + (pers * tempObj[x].ClientInvoiced)
                     }
                 }
-                stopLoading();
+                //   stopLoading();
             } else {
-                stopLoading();
+                // stopLoading();
             }
         }).then(function(data) {
             counter++;
@@ -146,9 +150,8 @@ function getPersOfTotal(pers, bigObj) {
 
     }
 
-
-
 }
+let done = false;
 
 function AddProject(UserPushEmail) {
     let EmployeeManagementSystemExtra = 0;
@@ -161,8 +164,11 @@ function AddProject(UserPushEmail) {
             tempObj = doc.get("object");
 
             push = true;
-            stopLoading();
+            //stopLoading();
         } else {
+            Employees[0].PayoutDue = Employees[0].PayoutDue + (final / 2)
+            console.log(Employees)
+            loadTable(Employees)
             stopLoading();
         }
         let total = 0;
@@ -183,8 +189,6 @@ function AddProject(UserPushEmail) {
         if (UserPushEmail == "jacovanstryp@gmail.com") { //This is compensation for development of this system & Setting Up Domains
             sumPayout += final;
         }
-
-
         if (push == true) {
             Employees.push({
                 EmpEmail: UserPushEmail,
@@ -192,11 +196,19 @@ function AddProject(UserPushEmail) {
                 PayoutDue: sumPayout,
             })
         }
+        for (var i = 0; i < Employees.length; i++) {
+            for (var x = i + 1; x < Employees.length; x++) {
+                if (Employees[i].TotalCompletedProjects < Employees[x].TotalCompletedProjects) {
+                    temp = Employees[i];
+                    Employees[i] = Employees[x];
+                    Employees[x] = temp;
+                }
+            }
+        }
         loadTable(Employees);
     })
 }
 
-stopLoading();
 
 function startLoading() {
     document.getElementById('loader').style.display = "block";
