@@ -208,6 +208,11 @@ function updateStatus(id) {
                 Jobs[i].Status = "Client Paid";
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             } else if (status == "Client Paid") {
+                let dm = prompt("Please enter / confirm the domain address you want to reserve for this client\nPlease make sure not to include www or https. Just (for example) google.com").toLowerCase()
+                if (dm != Jobs[i].Domain.toLowerCase()) {
+                    dm = prompt("The Domain you entered does not match the domain you first entered\nPlease double check and enter the domain you want to use for this client. The Domain You enter now, is the final set domain and can not be changed later.").toLowerCase();
+                    Jobs[i].Domain = dm;
+                }
                 Jobs[i].Status = "Domain Purchase Request Forwarded To Manager";
                 sendMail("Jaco van Stryp", "Domain Purchase Request - employee.jaxifysoftware.com/purchase.html#" + Jobs[i].ProjectID + "&7@!" + Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com", Jobs[i].DeveloperEmail);
                 alert("Your Purchase Request has been forwarded to a manager!")

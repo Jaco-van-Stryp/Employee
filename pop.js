@@ -59,7 +59,7 @@ function approve() {
                 object: Jobs,
             }).then(function () {
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-                sendMail("Developer", "You Made A Sale! Please visit employee.jaxifysoftware.com to confirm the domain that needs to be purchased.", Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
+                sendMail("Developer", "You Legend! You Made A Sale (" + Jobs[i].Domain + ")! Please visit employee.jaxifysoftware.com to confirm the domain that needs to be purchased.", Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
                 setTimeout(() => { closeWindow(); }, 2000);
             })
                 .catch(function (error) {
