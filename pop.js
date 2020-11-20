@@ -32,19 +32,18 @@ window.onload = function () {
                 Jobs = doc.get("object");
                 for (var i = 0; i < Jobs.length; i++) {
                     if (Jobs[i].ProjectID == id) {
-                        document.getElementById("miniInvoice").value = Jobs[i].ProjectInstructions
-                        if (Jobs[i].Status != "Pending Approval") {
+                        if (Jobs[i].Status != "Client Invoiced") {
                             window.location = "./index.html";
                         }
                     }
                 }
-                stopLoading();
             } else {
                 window.location = "./index.html"
                 //TODO NO INFO FOUND
-                stopLoading();
 
             }
+        }).then((data) => {
+            approve();
         })
     } catch (e) {
         window.location = "./index.html"
@@ -52,27 +51,27 @@ window.onload = function () {
 }
 
 function approve() {
-    if (document.getElementById("wave").value == "") {
-        alert("Please enter a wave Invoice")
-    } else {
-        for (var i = 0; i < Jobs.length; i++) {
-            if (Jobs[i].ProjectID == id) {
-                Jobs[i].Status = "Client Invoiced";
-                Jobs[i].WaveURL = document.getElementById("wave").value
-                db.collection('projects').doc(Jobs[i].DeveloperEmail).set({
-                    object: Jobs,
-                }).then(function () {
-                    sendMailFinance(Jobs[i].ClientName, "We just wanted to let you know that we've received your order for your website: " + Jobs[i].Domain + "! (ORDER NUMBER: " + Jobs[i].ProjectID + " ) We will keep you updated at all times. We Estimate your website will be completed on or before " + Jobs[i].DueDate + "! Before we can get started on reserving your domain name and building your website, we require you to make your invoiced payment of R" + (1 * Jobs[i].ClientInvoiced).toFixed(2) + ". Your Invoice can be found via this link - " + Jobs[i].WaveURL + "", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-                    sendMail("Developer", "Your Project - " + Jobs[i].Domain + " Has Been Approved. (Order Number - " + Jobs[i].ProjectID + " ) Please Visit employee.jaxifysoftware.com for further instructions! If your client wants to see the invoice in a pdf format, you can download it here: " + Jobs[i].WaveURL + " - You are expected to finish this website before " + Jobs[i].DueDate, Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
-                    alert("Project Approved")
-                })
-                    .catch(function (error) {
-                        alert("Something went Wrong")
-                    });
-            }
-            break;
+
+    for (var i = 0; i < Jobs.length; i++) {
+        if (Jobs[i].ProjectID == id) {
+            Jobs[i].Status = "Client Paid";
+            db.collection('projects').doc(Jobs[i].DeveloperEmail).set({
+                object: Jobs,
+            }).then(function () {
+                sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+                sendMail("Developer", "You Made A Sale! Please visit employee.jaxifysoftware.com to confirm the domain that needs to be purchased.", Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
+                setTimeout(() => { closeWindow(); }, 2000);
+            })
+                .catch(function (error) {
+                    alert("Something went Wrong")
+                });
         }
+        break;
     }
+}
+
+function closeWindow() {
+    window.location = "./index.html"
 }
 
 function sendMailFinance(client, Themessage, emailAddress, devEmail) {

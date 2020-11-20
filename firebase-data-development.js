@@ -18,7 +18,7 @@ const db = firebase.firestore();
 
 
 
-window.onload = function() {
+window.onload = function () {
     console.log("Loaded")
 }
 
@@ -46,11 +46,11 @@ function getCookie(cname) {
 function convertToFireBase(obj) {
     const smartVal = semail;
     db.collection('projects').doc(smartVal).set({
-            object: obj,
-        }).then(function() {
+        object: obj,
+    }).then(function () {
 
-        })
-        .catch(function(error) {
+    })
+        .catch(function (error) {
 
         });
     loadTable(obj)
@@ -60,7 +60,7 @@ let fname, semail, photoUrl, uid, emailVerified;
 try {
     var user = firebase.auth().currentUser;
 
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             if (user != null) {
                 fname = user.displayName;
@@ -74,7 +74,7 @@ try {
                 const smartVal = semail
                 console.log(smartVal)
                 userData = db.collection("projects").doc(smartVal);
-                userData.get().then(function(doc) {
+                userData.get().then(function (doc) {
                     if (doc.exists) {
                         Jobs = doc.get("object");
                         loadTable(Jobs);
@@ -86,7 +86,7 @@ try {
                         stopLoading();
 
                     }
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.log("Error getting document:", error);
                     //TODO NO INFO FOUND
 
@@ -102,7 +102,7 @@ try {
     });
 } catch (exception) {
     console.log(exception)
-        //TODO NO INFO FOUND
+    //TODO NO INFO FOUND
 
 }
 
@@ -318,7 +318,7 @@ function AddProject() {
         document.getElementById("project_instructions").value = "";
         document.getElementById("project_due_date").value = "";
         document.getElementById("domain").value = "";
-        sendMail("Jaco van Stryp", "Project Approval Request - employee.jaxifysoftware.com/approve.html#" + projID + "&7@!" + developer, "jacovanstryp@gmail.com", developer);
+        sendMail("Jaco van Stryp", "Project Approval Request - employee.jaxifysoftware.com/approve.html#" + projID + "&7@!" + developer + " | Confirm Payment Received - employee.jaxifysoftware.com/pop.html#" + projID + "&7@!" + developer, "jacovanstryp@gmail.com", developer);
         convertToFireBase(Jobs);
         window.scrollTo(0, 0);
 
@@ -332,7 +332,7 @@ function AddProject() {
 
 function genR() {
     var dt = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = (dt + Math.random() * 16) % 16 | 0;
         dt = Math.floor(dt / 16);
         return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
@@ -344,7 +344,7 @@ function genR() {
 const genRandom = document.getElementById("auto_generate");
 genRandom.addEventListener('click', e => {
     var dt = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = (dt + Math.random() * 16) % 16 | 0;
         dt = Math.floor(dt / 16);
         return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);

@@ -18,11 +18,11 @@ const db = firebase.firestore();
 
 let AllEmployees = []
 
-window.onload = function() {
+window.onload = function () {
     startLoading();
     let temp = [];
     userData = db.collection("emp_data").doc("emps");
-    userData.get().then(function(doc) {
+    userData.get().then(function (doc) {
         if (doc.exists) {
             temp = doc.get("Employees");
             AllEmployees = temp;
@@ -83,13 +83,11 @@ function loadTable(streamData) {
     let table = document.getElementById("mainTable");
     table.innerHTML = "<tr><th>Employee Email</th><th>Total Projects Completed</th><th>Payout Due</th><th>Confirm Payment</th></tr>";
     for (var i = 0; i < PredictionMonths.length; i++) {
-
         table.innerHTML += "<tr><td>" + PredictionMonths[i].EmpEmail + "</td><td>" + PredictionMonths[i].TotalCompletedProjects + "</td><td>R" + (1 * PredictionMonths[i].PayoutDue).toFixed(2) + "</td><td><button id=\"" + PredictionMonths[i].EmpEmail + "\" onclick=\"sendMail(\'" + PredictionMonths[i].EmpEmail + "\',\'" + PredictionMonths[i].PayoutDue + "\',\'" + PredictionMonths[i].TotalCompletedProjects + "\')\">Confirm Payment</button></td><tr>";
         sumMonth += PredictionMonths[i].PayoutDue
         document.getElementById("user_display_name").innerHTML = "Payout Due This Month R" + sumMonth.toFixed(2)
     }
     // stopLoading();
-
 }
 
 function signOut() {
@@ -126,7 +124,7 @@ function getPersOfTotal(pers, bigObj) {
     let counter = 0;
     for (var i = 0; i < bigObj.length; i++) {
         userData = db.collection("projects").doc(bigObj[i]);
-        userData.get().then(function(doc) {
+        userData.get().then(function (doc) {
             if (doc.exists) {
                 tempObj = doc.get("object");
                 if (tempObj.length >= 1) {
@@ -138,7 +136,7 @@ function getPersOfTotal(pers, bigObj) {
             } else {
                 // stopLoading();
             }
-        }).then(function(data) {
+        }).then(function (data) {
             counter++;
             if (counter == bigObj.length) {
                 loadProfiles();
@@ -156,12 +154,13 @@ function AddProject(UserPushEmail) {
     let tempObj = [];
     let userData;
     userData = db.collection("projects").doc(UserPushEmail);
-    userData.get().then(function(doc) {
+    userData.get().then(function (doc) {
         if (doc.exists) {
             tempObj = doc.get("object");
             push = true;
         } else {
-            Employees[0].PayoutDue = Employees[0].PayoutDue + (final / 2)
+            //temp disabled
+            // Employees[0].PayoutDue = Employees[0].PayoutDue + (final / 2)
             console.log(Employees)
             loadTable(Employees)
             stopLoading();
@@ -182,9 +181,11 @@ function AddProject(UserPushEmail) {
             }
 
         }
-        if (UserPushEmail == "jacovanstryp@gmail.com") { //This is compensation for development of this system & Setting Up Domains
+        //Temp Disabled
+        /*   if (UserPushEmail == "jacovanstryp@gmail.com") { //This is compensation for development of this system & Setting Up Domains
             sumPayout += final;
         }
+        */
         if (push == true) {
             Employees.push({
                 EmpEmail: UserPushEmail,
@@ -202,7 +203,7 @@ function AddProject(UserPushEmail) {
             }
         }
         loadTable(Employees);
-    }).then(function(data) {
+    }).then(function (data) {
         stopLoading();
     })
 }
