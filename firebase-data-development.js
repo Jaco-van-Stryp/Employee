@@ -18,7 +18,7 @@ const db = firebase.firestore();
 
 
 
-window.onload = function () {
+window.onload = function() {
     console.log("Loaded")
 }
 
@@ -46,11 +46,11 @@ function getCookie(cname) {
 function convertToFireBase(obj) {
     const smartVal = semail;
     db.collection('projects').doc(smartVal).set({
-        object: obj,
-    }).then(function () {
+            object: obj,
+        }).then(function() {
 
-    })
-        .catch(function (error) {
+        })
+        .catch(function(error) {
 
         });
     loadTable(obj)
@@ -60,7 +60,7 @@ let fname, semail, photoUrl, uid, emailVerified;
 try {
     var user = firebase.auth().currentUser;
 
-    firebase.auth().onAuthStateChanged(function (user) {
+    firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             if (user != null) {
                 fname = user.displayName;
@@ -74,7 +74,7 @@ try {
                 const smartVal = semail
                 console.log(smartVal)
                 userData = db.collection("projects").doc(smartVal);
-                userData.get().then(function (doc) {
+                userData.get().then(function(doc) {
                     if (doc.exists) {
                         Jobs = doc.get("object");
                         loadTable(Jobs);
@@ -86,7 +86,7 @@ try {
                         stopLoading();
 
                     }
-                }).catch(function (error) {
+                }).catch(function(error) {
                     console.log("Error getting document:", error);
                     //TODO NO INFO FOUND
 
@@ -102,7 +102,7 @@ try {
     });
 } catch (exception) {
     console.log(exception)
-    //TODO NO INFO FOUND
+        //TODO NO INFO FOUND
 
 }
 
@@ -292,52 +292,56 @@ function AddProject() {
     var instructions = document.getElementById("project_instructions").value
     var dueDate = document.getElementById("project_due_date").value
     var address = document.getElementById("domain").value
-
-    today = mm + '/' + dd + '/' + yyyy;
-    if (projID == "" || projID.length <= 7 || developer == "" || clientName == "" || clientEmail == "" || clientInvoiced == "" || projectStatus == "" || instructions == "" || dueDate == "") {
-        alert("Please make sure all info is filled in correctly")
-    } else if (doesIDExist(projID) == false) {
-        var d = new Date();
-        let sDate = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
-        console.log(sDate);
-        Jobs.push({
-            ProjectID: projID,
-            ProjectType: projectType,
-            DeveloperEmail: developer,
-            ClientName: clientName,
-            ClientEmail: clientEmail,
-            ClientInvoiced: clientInvoiced,
-            Status: projectStatus,
-            ProjectInstructions: instructions,
-            DueDate: dueDate,
-            DateStarted: sDate,
-            DateCompleted: null,
-            WaveURL: "",
-            Domain: address,
-        })
-        document.getElementById("project_ID").value = "";
-        document.getElementById("project_developer_email").value = "";
-        document.getElementById("project_client_name").value = "";
-        document.getElementById("project_client_email").value = "";
-        document.getElementById("project_client_invoiced").value = "";
-        document.getElementById("project_instructions").value = "";
-        document.getElementById("project_due_date").value = "";
-        document.getElementById("domain").value = "";
-        sendMail("Jaco van Stryp", "Project Approval Request - employee.jaxifysoftware.com/approve.html#" + projID + "&7@!" + developer + " | Confirm Payment Received - employee.jaxifysoftware.com/pop.html#" + projID + "&7@!" + developer, "jacovanstryp@gmail.com", developer);
-        convertToFireBase(Jobs);
-        window.scrollTo(0, 0);
-
-        alert("New Project Added Successfully\nYour project has been forwarded to a manager so they can add an invoice. When The Client Pays, Please Update The Status Of The Project!")
-
+    if ((1 * clientInvoiced) < 300) {
+        alert("You need to charge at least R300 or more per project")
     } else {
-        alert("This ID Already Exists!")
+        today = mm + '/' + dd + '/' + yyyy;
+        if (projID == "" || projID.length <= 7 || developer == "" || clientName == "" || clientEmail == "" || clientInvoiced == "" || projectStatus == "" || instructions == "" || dueDate == "") {
+            alert("Please make sure all info is filled in correctly")
+        } else if (doesIDExist(projID) == false) {
+            var d = new Date();
+            let sDate = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+            console.log(sDate);
+            Jobs.push({
+                ProjectID: projID,
+                ProjectType: projectType,
+                DeveloperEmail: developer,
+                ClientName: clientName,
+                ClientEmail: clientEmail,
+                ClientInvoiced: clientInvoiced,
+                Status: projectStatus,
+                ProjectInstructions: instructions,
+                DueDate: dueDate,
+                DateStarted: sDate,
+                DateCompleted: null,
+                WaveURL: "",
+                Domain: address,
+            })
+            document.getElementById("project_ID").value = "";
+            document.getElementById("project_developer_email").value = "";
+            document.getElementById("project_client_name").value = "";
+            document.getElementById("project_client_email").value = "";
+            document.getElementById("project_client_invoiced").value = "";
+            document.getElementById("project_instructions").value = "";
+            document.getElementById("project_due_date").value = "";
+            document.getElementById("domain").value = "";
+            sendMail("Jaco van Stryp", "Project Approval Request - employee.jaxifysoftware.com/approve.html#" + projID + "&7@!" + developer + " | Confirm Payment Received - employee.jaxifysoftware.com/pop.html#" + projID + "&7@!" + developer, "jacovanstryp@gmail.com", developer);
+            convertToFireBase(Jobs);
+            window.scrollTo(0, 0);
+
+            alert("New Project Added Successfully\nYour project has been forwarded to a manager so they can add an invoice. When The Client Pays, Please Update The Status Of The Project!")
+
+        } else {
+            alert("This ID Already Exists!")
+        }
     }
+
 
 }
 
 function genR() {
     var dt = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (dt + Math.random() * 16) % 16 | 0;
         dt = Math.floor(dt / 16);
         return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
@@ -349,7 +353,7 @@ function genR() {
 const genRandom = document.getElementById("auto_generate");
 genRandom.addEventListener('click', e => {
     var dt = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (dt + Math.random() * 16) % 16 | 0;
         dt = Math.floor(dt / 16);
         return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
