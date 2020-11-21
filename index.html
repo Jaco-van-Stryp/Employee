@@ -267,6 +267,13 @@
                                 Log In
                             </li>
                         </a>
+                        <br>
+
+                        <a onclick="resetPassword()" href="#" class="nounderline">
+                            <li id="signin_btn">
+                                I Forgot My Employee Code
+                            </li>
+                        </a>
                     </ul>
                 </section>
             </div>
@@ -380,6 +387,21 @@
             }
         })
     }());
+
+    function resetPassword() {
+        var auth = firebase.auth();
+        let emailAddress = document.getElementById("client_info").value;
+        if (emailAddress == "") {
+            alert("Please enter your registered employee email first ")
+        } else {
+            auth.sendPasswordResetEmail(emailAddress).then(function() {
+                alert("We've sent you a email to reset your Employee Code!")
+            }).catch(function(error) {
+                alert("You don't seem to be an employee of Jaxify Software")
+            });
+        }
+
+    }
 
     function accountValidation(email, pass) {
 

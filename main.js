@@ -4,6 +4,16 @@ function storeSearchQuery(query) {
     document.cookie = mainData;
 }
 
+function resetPassword() {
+    var auth = firebase.auth();
+    let emailAddress = document.getElementById("client_info").value;
+    auth.sendPasswordResetEmail(emailAddress).then(function() {
+        alert("We've sent you a email to reset your password")
+    }).catch(function(error) {
+        alert("Please enter your employee email first")
+    });
+}
+
 function loginError(message) {
     stopLoading();
     console.log(message)
