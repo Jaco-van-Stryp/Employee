@@ -325,79 +325,78 @@ function AddProject() {
             document.getElementById("project_instructions").value = "";
             document.getElementById("project_due_date").value = "";
             document.getElementById("domain").value = "";
-            sendMail("Jaco van Stryp", "Project Approval Request for " + developer + " with the client being: " + clientName + " Invoiced: R" + clientInvoiced + "" - employee.jaxifysoftware.com / approve.html# " + projID + " & 7 @!" + developer + " | Confirm Payment Received - employee.jaxifysoftware.com / pop.html# " + projID + " & 7 @!" + developer, "
-                jacovanstryp @gmail.com ", developer);
-                convertToFireBase(Jobs); window.scrollTo(0, 0);
+            sendMail("Jaco van Stryp", "Project Approval Request for " + developer + " with the client being: " + clientName + " Invoiced: R" + clientInvoiced + " - employee.jaxifysoftware.com / approve.html# " + projID + " & 7 @!" + developer + " | Confirm Payment Received - employee.jaxifysoftware.com / pop.html# " + projID + " & 7 @!" + developer, "jacovanstryp @gmail.com ", developer);
+            convertToFireBase(Jobs);
+            window.scrollTo(0, 0);
 
-                alert("New Project Added Successfully\nYour project has been forwarded to a manager so they can add an invoice. When The Client Pays, Please Update The Status Of The Project!")
+            alert("New Project Added Successfully\nYour project has been forwarded to a manager so they can add an invoice. When The Client Pays, Please Update The Status Of The Project!")
 
-            }
-            else {
-                alert("This ID Already Exists!")
-            }
+        } else {
+            alert("This ID Already Exists!")
         }
-
-
     }
 
-    function genR() {
-        var dt = new Date().getTime();
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = (dt + Math.random() * 16) % 16 | 0;
-            dt = Math.floor(dt / 16);
-            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-        });
-        uuid = uuid.substr(0, 8);
-        document.getElementById("project_ID").value = uuid;
 
-    }
-    const genRandom = document.getElementById("auto_generate");
-    genRandom.addEventListener('click', e => {
-        var dt = new Date().getTime();
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = (dt + Math.random() * 16) % 16 | 0;
-            dt = Math.floor(dt / 16);
-            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-        });
-        uuid = uuid.substr(0, 8);
-        document.getElementById("project_ID").value = uuid;
+}
+
+function genR() {
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
+    uuid = uuid.substr(0, 8);
+    document.getElementById("project_ID").value = uuid;
+
+}
+const genRandom = document.getElementById("auto_generate");
+genRandom.addEventListener('click', e => {
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    uuid = uuid.substr(0, 8);
+    document.getElementById("project_ID").value = uuid;
+});
 
 
-    function startLoading() {
-        document.getElementById('loader').style.display = "block";
-        document.getElementById('loading').style.display = "block";
-        document.getElementById('overlay').style.display = "block";
-    }
+function startLoading() {
+    document.getElementById('loader').style.display = "block";
+    document.getElementById('loading').style.display = "block";
+    document.getElementById('overlay').style.display = "block";
+}
 
-    function stopLoading() {
-        document.getElementById('loader').style.display = "none";
-        document.getElementById('loading').style.display = "none";
-        document.getElementById('overlay').style.display = "none";
-    }
+function stopLoading() {
+    document.getElementById('loader').style.display = "none";
+    document.getElementById('loading').style.display = "none";
+    document.getElementById('overlay').style.display = "none";
+}
 
-    function startLoading() {
-        document.getElementById('loader').style.display = "block";
-        document.getElementById('loading').style.display = "block";
-        document.getElementById('overlay').style.display = "block";
-    }
+function startLoading() {
+    document.getElementById('loader').style.display = "block";
+    document.getElementById('loading').style.display = "block";
+    document.getElementById('overlay').style.display = "block";
+}
 
-    function stopLoading() {
-        document.getElementById('loader').style.display = "none";
-        document.getElementById('loading').style.display = "none";
-        document.getElementById('overlay').style.display = "none";
-    }
+function stopLoading() {
+    document.getElementById('loader').style.display = "none";
+    document.getElementById('loading').style.display = "none";
+    document.getElementById('overlay').style.display = "none";
+}
 
-    /*
-    <style>
+/*
+<style>
 
-    </style>
-    <section>
-    <p style="text-align: left;">Good Day {{to_name}},</p>
-    <p style="text-align: left;">We trust all is well!</p>
-    <p style="text-align: left;">{{message}}</p>
-    <p style="text-align: left;">If you have any other questions, feel free to reply to this email and we'll gladly help!</p>
-    <p style="text-align: left;">Best wishes,<br />www.jaxifysoftware.com</p>
+</style>
+<section>
+<p style="text-align: left;">Good Day {{to_name}},</p>
+<p style="text-align: left;">We trust all is well!</p>
+<p style="text-align: left;">{{message}}</p>
+<p style="text-align: left;">If you have any other questions, feel free to reply to this email and we'll gladly help!</p>
+<p style="text-align: left;">Best wishes,<br />www.jaxifysoftware.com</p>
 
-    </section>
-    */
+</section>
+*/
