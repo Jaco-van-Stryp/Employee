@@ -19,7 +19,7 @@ let idIndex = 0;
 let id, developer;
 let pass = generatePassword();
 
-window.onload = function () {
+window.onload = function() {
     let curDomain = window.location.href;
     let ProjectIdentification = curDomain.substr(curDomain.indexOf('#') + 1, curDomain.length);
     let data = ProjectIdentification.split("&7@!");
@@ -27,12 +27,15 @@ window.onload = function () {
     developer = data[1];
     try {
         let userData = db.collection("projects").doc(developer);
-        userData.get().then(function (doc) {
+        userData.get().then(function(doc) {
             if (doc.exists) {
                 Jobs = doc.get("object");
                 for (var i = 0; i < Jobs.length; i++) {
                     if (Jobs[i].ProjectID == id) {
                         document.getElementById("miniInvoice").value = Jobs[i].ProjectInstructions
+                        document.getElementById("clientEmail").value = "Customer Email: " + Jobs[i].ClientEmail
+                        document.getElementById("totalInvoiced").value = "Total Invoiced: R" + Jobs[i].ClientInvoiced
+
                         if (Jobs[i].Status != "Pending Approval") {
                             window.location = "./index.html";
                         }
@@ -41,7 +44,7 @@ window.onload = function () {
                 stopLoading();
             } else {
                 window.location = "./index.html"
-                //TODO NO INFO FOUND
+                    //TODO NO INFO FOUND
                 stopLoading();
 
             }
@@ -60,13 +63,13 @@ function approve() {
                 Jobs[i].Status = "Client Invoiced";
                 Jobs[i].WaveURL = document.getElementById("wave").value
                 db.collection('projects').doc(Jobs[i].DeveloperEmail).set({
-                    object: Jobs,
-                }).then(function () {
-                    sendMailFinance(Jobs[i].ClientName, "We just wanted to let you know that we've received your order for your website: " + Jobs[i].Domain + "! (ORDER NUMBER: " + Jobs[i].ProjectID + " ) We will keep you updated at all times. We Estimate your website will be completed on or before " + Jobs[i].DueDate + "! Before we can get started on reserving your domain name and building your website, we require you to make your invoiced payment of R" + (1 * Jobs[i].ClientInvoiced).toFixed(2) + ". Your Invoice can be found via this link - " + Jobs[i].WaveURL + "", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-                    sendMail("Developer", "Your Project - " + Jobs[i].Domain + " Has Been Approved. (Order Number - " + Jobs[i].ProjectID + " ) Please Visit employee.jaxifysoftware.com for further instructions! If your client wants to see the invoice in a pdf format, you can download it here: " + Jobs[i].WaveURL + " - You are expected to finish this website before " + Jobs[i].DueDate, Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
-                    alert("Project Approved")
-                })
-                    .catch(function (error) {
+                        object: Jobs,
+                    }).then(function() {
+                        sendMailFinance(Jobs[i].ClientName, "We just wanted to let you know that we've received your order for your website: " + Jobs[i].Domain + "! (ORDER NUMBER: " + Jobs[i].ProjectID + " ) We will keep you updated at all times. We Estimate your website will be completed on or before " + Jobs[i].DueDate + "! Before we can get started on reserving your domain name and building your website, we require you to make your invoiced payment of R" + (1 * Jobs[i].ClientInvoiced).toFixed(2) + ". Your Invoice can be found via this link - " + Jobs[i].WaveURL + "", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+                        sendMail("Developer", "Your Project - " + Jobs[i].Domain + " Has Been Approved. (Order Number - " + Jobs[i].ProjectID + " ) Please Visit employee.jaxifysoftware.com for further instructions! If your client wants to see the invoice in a pdf format, you can download it here: " + Jobs[i].WaveURL + " - You are expected to finish this website before " + Jobs[i].DueDate, Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
+                        alert("Project Approved")
+                    })
+                    .catch(function(error) {
                         alert("Something went Wrong")
                     });
             }
