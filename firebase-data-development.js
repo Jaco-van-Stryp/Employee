@@ -281,7 +281,7 @@ function AddProject() {
 
     var projID = "blank"
     projID = document.getElementById("project_ID").value
-    var developer = document.getElementById("project_developer_email").value
+    var developer = semail; //document.getElementById("project_developer_email").value
 
     var projectType = "Website"
 
@@ -318,7 +318,7 @@ function AddProject() {
                 Domain: address,
             })
             document.getElementById("project_ID").value = "";
-            document.getElementById("project_developer_email").value = "";
+            //  document.getElementById("project_developer_email").value = "";
             document.getElementById("project_client_name").value = "";
             document.getElementById("project_client_email").value = "";
             document.getElementById("project_client_invoiced").value = "";
