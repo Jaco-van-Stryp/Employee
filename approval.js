@@ -33,8 +33,9 @@ window.onload = function() {
                 for (var i = 0; i < Jobs.length; i++) {
                     if (Jobs[i].ProjectID == id) {
                         document.getElementById("miniInvoice").value = Jobs[i].ProjectInstructions
-                        document.getElementById("clientEmail").value = "Customer Email: " + Jobs[i].ClientEmail
-                        document.getElementById("totalInvoiced").value = "Total Invoiced: R" + Jobs[i].ClientInvoiced
+                        document.getElementById("clientEmail").innerHTML = "Customer Email: " + Jobs[i].ClientEmail
+                        document.getElementById("totalInvoiced").innerHTML = "Total Invoiced: R" + Jobs[i].ClientInvoiced
+                        document.getElementById("cname").innerHTML = "Client Name " + Jobs[i].ClientName
 
                         if (Jobs[i].Status != "Pending Approval") {
                             window.location = "./index.html";
