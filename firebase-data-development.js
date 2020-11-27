@@ -331,7 +331,7 @@ function AddProject() {
             document.getElementById("project_instructions").value = "";
             document.getElementById("project_due_date").value = "";
             document.getElementById("domain").value = "";
-            sendMail("Jaco van Stryp", "Project Approval Request for " + developer + " with the client being: " + clientName + " Invoiced: R" + clientInvoiced + " - employee.jaxifysoftware.com/approve.html# " + projID + "&7@!" + developer + " | Confirm Payment Received - employee.jaxifysoftware.com/pop.html#" + projID + "&7@!" + developer, "jacovanstryp@gmail.com ", developer);
+            sendMail("Jaco van Stryp", "Project Approval Request for " + developer + " with the client being: " + clientName + " Invoiced: R" + clientInvoiced + " - employee.jaxifysoftware.com/approve.html#" + projID + "&7@!" + developer + " | Confirm Payment Received - employee.jaxifysoftware.com/pop.html#" + projID + "&7@!" + developer, "jacovanstryp@gmail.com ", developer);
             convertToFireBase(Jobs);
             window.scrollTo(0, 0);
 
