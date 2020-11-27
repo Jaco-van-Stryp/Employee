@@ -84,12 +84,14 @@ function moveOn() {
                             object: Jobs,
                         }).then(function() {
                             sendMail("Developer", "Your Domain Request Has Been Approved! To start Working, please visit this link - " + Jobs[i].Domain + "/wp-admin - username: " + Jobs[i].DeveloperEmail + " password: " + pass, Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
-                            document.getElementById("mainbtn").innerHTML = ("Setup Complete");
-                            window.location = "./index.html";
+                            document.getElementById("mainbtn").innerHTML = ("Go Home");
                         })
                         .catch(function(error) {
                             alert("Something went Wrong")
                         });
+                }
+                if (btnValue == ("Go Home")) {
+                    document.location = "./index.html"
                 }
                 break;
             }
