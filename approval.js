@@ -58,23 +58,38 @@ window.onload = function() {
 function approve() {
     if (document.getElementById("wave").value == "") {
         alert("Please enter a wave Invoice")
+        console.log("IF")
     } else {
+        let found = false;
+        console.log(id)
+        console.log(Jobs)
+
         for (var i = 0; i < Jobs.length; i++) {
+            console.log(Jobs[1].ProjectID)
+            console.log(Jobs[i].ProjectID)
             if (Jobs[i].ProjectID == id) {
+
                 Jobs[i].Status = "Client Invoiced";
                 Jobs[i].WaveURL = document.getElementById("wave").value
+                console.log("ELSE")
+                console.log(Jobs[i])
+
                 db.collection('projects').doc(Jobs[i].DeveloperEmail).set({
                         object: Jobs,
                     }).then(function() {
                         sendMailFinance(Jobs[i].ClientName, "We just wanted to let you know that we've received your order for your website: " + Jobs[i].Domain + "! (ORDER NUMBER: " + Jobs[i].ProjectID + " ) We will keep you updated at all times. We Estimate your website will be completed on or before " + Jobs[i].DueDate + "! Before we can get started on reserving your domain name and building your website, we require you to make a deposit of R150. Your invoiced payment of R" + (1 * Jobs[i].ClientInvoiced).toFixed(2) + " may also be paid in full now if you would like to speed up the process. A Deposit of R150 Is required upfront before we can start with anything on our side. This is simply to ensure that no one disappears without paying for their website. Your Invoice can be found via this link - " + Jobs[i].WaveURL + "", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
                         sendMail("Developer", "Your Project - " + Jobs[i].Domain + " Has Been Approved. (Order Number - " + Jobs[i].ProjectID + " ) Please Visit employee.jaxifysoftware.com for further instructions! If your client wants to see the invoice in a pdf format, you can download it here: " + Jobs[i].WaveURL + " - You are expected to finish this website before " + Jobs[i].DueDate, Jobs[i].DeveloperEmail, "jacovanstryp@gmail.com");
-                        alert("Project Approved")
+                        alert("Project Approved");
+
                     })
                     .catch(function(error) {
-                        alert("Something went Wrong")
+                        alert("Something went Wrong " + error)
                     });
+                break;
+
+            } else {
+                console.log(Jobs[i].ProjectID + " DOES NOT MATCH " + id)
             }
-            break;
         }
     }
 }
