@@ -178,7 +178,9 @@ function getNextStatus(id) {
             if (status == "Project Registered") {
                 return "Invoice Client";
             } else if (status == "Client Invoiced") {
-                return "Mark As Paid";
+                return "Mark As R150 Deposit Paid";
+            } else if (status == "Client Paid R150 Deposit") {
+                return "Mark As Fully Paid";
             } else if (status == "Client Paid") {
                 return "Request Domain Purchase";
             } else if (status == "Domain Purchase Request Forwarded To Manager") {
@@ -205,6 +207,10 @@ function updateStatus(id) {
                 Jobs[i].Status = "Client Invoiced";
                 //  sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've sent you an invoice for your website: " + Jobs[i].Domain + "! It can be viewed here - " + Jobs[i].WaveURL + "\nOnce We Receive Payment, you'll receive a notification!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             } else if (status == "Client Invoiced") {
+                Jobs[i].Status = "Client Paid R150 Deposit";
+                sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your deposit of R" + 150 + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+            }
+            if (status == "Client Paid R150 Deposit") {
                 Jobs[i].Status = "Client Paid";
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             } else if (status == "Client Paid") {
