@@ -345,6 +345,16 @@ function AddProject() {
 
 }
 
+function sendWhatsApp() {
+    let num = document.getElementById("pnum").value;
+    if (num.length != 9 || num[0] == 0) {
+        alert("Invalid Number - The 0 at the start is automatically replaced with the +27")
+    } else {
+        num = "+27" + num;
+        window.open("https://wa.me/" + num)
+    }
+}
+
 function genR() {
     var dt = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
