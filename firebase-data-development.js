@@ -16,8 +16,6 @@ firebase.analytics();
 const db = firebase.firestore();
 
 
-
-
 window.onload = function() {
     console.log("Loaded")
 }
@@ -179,7 +177,7 @@ function getNextStatus(id) {
                 return "Invoice Client";
             } else if (status == "Client Invoiced") {
                 return "Mark As R150 Deposit Paid";
-            } else if (status == "Client Paid") {
+            } else if (status == "Client Paid R150 Deposit") {
                 return "Request Domain Purchase";
             } else if (status == "Domain Purchase Request Forwarded To Manager") {
                 return "";
@@ -189,7 +187,7 @@ function getNextStatus(id) {
                 return "I'm Ready To Start Working On The Project";
             } else if (status == "Website Work Started") {
                 return "I've Completed The Project";
-            } else return "Mark As Fully Paid"
+            } else return "";
         }
     }
 }
