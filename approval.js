@@ -65,7 +65,6 @@ function approve() {
         console.log(Jobs)
 
         for (var i = 0; i < Jobs.length; i++) {
-            console.log(Jobs[1].ProjectID)
             console.log(Jobs[i].ProjectID)
             if (Jobs[i].ProjectID == id) {
 
