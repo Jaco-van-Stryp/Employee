@@ -179,8 +179,6 @@ function getNextStatus(id) {
                 return "Invoice Client";
             } else if (status == "Client Invoiced") {
                 return "Mark As R150 Deposit Paid";
-            } else if (status == "Client Paid R150 Deposit") {
-                return "Mark As Fully Paid";
             } else if (status == "Client Paid") {
                 return "Request Domain Purchase";
             } else if (status == "Domain Purchase Request Forwarded To Manager") {
@@ -191,7 +189,7 @@ function getNextStatus(id) {
                 return "I'm Ready To Start Working On The Project";
             } else if (status == "Website Work Started") {
                 return "I've Completed The Project";
-            } else return ""
+            } else return "Mark As Fully Paid"
         }
     }
 }
@@ -209,11 +207,7 @@ function updateStatus(id) {
             } else if (status == "Client Invoiced") {
                 Jobs[i].Status = "Client Paid R150 Deposit";
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your deposit of R" + 150 + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-            }
-            if (status == "Client Paid R150 Deposit") {
-                Jobs[i].Status = "Client Paid";
-                sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "! We will keep you updated!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
-            } else if (status == "Client Paid") {
+            } else if (status == "Client Paid R150 Deposit") {
                 let dm = prompt("Please enter / confirm the domain address you want to reserve for this client\nPlease make sure not to include www or https. Just (for example) google.com").toLowerCase()
                 if (dm != Jobs[i].Domain.toLowerCase()) {
                     dm = prompt("The Domain you entered does not match the domain you first entered\nPlease double check and enter the domain you want to use for this client. The Domain You enter now, is the final set domain and can not be changed later.").toLowerCase();
@@ -234,14 +228,17 @@ function updateStatus(id) {
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that your website domain " + Jobs[i].Domain + " is now live on the public internet, we're still building your website and will let you know when everything is completed!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
                 window.open("https://my.bluehost.com/hosting/app/#/create/wordpress")
             } else if (status == "Website Work Started") {
-                Jobs[i].Status = "Website Completed";
-                sendMail(Jobs[i].ClientName, "We have Great News! Your website " + Jobs[i].Domain + " is all completed and ready for you and your customers to use! Should you want a course on maintaining your own website, we explain everything in detail here on how to manage, maintain and build your own pages! - https://www.jaxifysoftware.com/shop/course/ - To sign into the dashboard of your website, please use the following address " + Jobs[i].Domain + "/wp-admin - You'll click on forgot password, and reset it with your email account. It was really nice working with you, and we'd love it if you could review our services! - https://www.facebook.com/jaxifysoftware/reviews", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
+                Jobs[i].Status = "Awaiting Client Payment";
+                sendMail(Jobs[i].ClientName, "We have Great News! Your website " + Jobs[i].Domain + " is all completed and ready for you and your customers to use! Should you want a course on maintaining your own website, we explain everything in detail here on how to manage, maintain and build your own pages! - https://www.jaxifysoftware.com/shop/course/ - To sign into the dashboard of your website, please use the following address " + Jobs[i].Domain + "/wp-admin - You'll click on forgot password, and reset it with your email account. It was really nice working with you, and we'd love it if you could review our services! - https://www.facebook.com/jaxifysoftware/reviews If you have not already, please remember to make the final payment of R" + (Jobs[i].ClientInvoiced - 150).toFixed(2), Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
                 let d = new Date;
                 Jobs[i].DateCompleted = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
                 window.open("https://" + Jobs[i].Domain + "/wp-admin/user-new.php")
 
-            } else {
+            }
+            if (status == "Awaiting Client Payment") {
+                Jobs[i].Status = "Website Completed";
 
+                sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             }
             convertToFireBase(Jobs);
         }
