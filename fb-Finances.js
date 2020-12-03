@@ -18,11 +18,11 @@ const db = firebase.firestore();
 
 let AllEmployees = []
 
-window.onload = function () {
+window.onload = function() {
     startLoading();
     let temp = [];
     userData = db.collection("emp_data").doc("emps");
-    userData.get().then(function (doc) {
+    userData.get().then(function(doc) {
         if (doc.exists) {
             temp = doc.get("Employees");
             AllEmployees = temp;
@@ -124,7 +124,7 @@ function getPersOfTotal(pers, bigObj) {
     let counter = 0;
     for (var i = 0; i < bigObj.length; i++) {
         userData = db.collection("projects").doc(bigObj[i]);
-        userData.get().then(function (doc) {
+        userData.get().then(function(doc) {
             if (doc.exists) {
                 tempObj = doc.get("object");
                 if (tempObj.length >= 1) {
@@ -136,7 +136,7 @@ function getPersOfTotal(pers, bigObj) {
             } else {
                 // stopLoading();
             }
-        }).then(function (data) {
+        }).then(function(data) {
             counter++;
             if (counter == bigObj.length) {
                 loadProfiles();
@@ -154,7 +154,7 @@ function AddProject(UserPushEmail) {
     let tempObj = [];
     let userData;
     userData = db.collection("projects").doc(UserPushEmail);
-    userData.get().then(function (doc) {
+    userData.get().then(function(doc) {
         if (doc.exists) {
             tempObj = doc.get("object");
             push = true;
@@ -175,7 +175,7 @@ function AddProject(UserPushEmail) {
             const d = new Date();
 
 
-            if (date1.getFullYear() == d.getFullYear() && date1.getMonth() == d.getMonth() && date1.getDay() <= 25) {
+            if (date1.getFullYear() == d.getFullYear() && date1.getMonth() == d.getMonth()) {
                 total++;
                 sumPayout += (0.7 * tempObj[i].ClientInvoiced)
             }
@@ -203,7 +203,7 @@ function AddProject(UserPushEmail) {
             }
         }
         loadTable(Employees);
-    }).then(function (data) {
+    }).then(function(data) {
         stopLoading();
     })
 }

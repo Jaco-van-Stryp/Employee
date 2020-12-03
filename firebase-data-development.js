@@ -129,8 +129,8 @@ function loadTable(streamData) {
             console.log(date1)
             console.log(d)
 
-            if (date1.getFullYear() != d.getFullYear() || date1.getMonth() != d.getMonth() || date1.getDay() > 25) {
-
+            if (date1.getFullYear() != d.getFullYear() || date1.getMonth() != d.getMonth()) {
+                console.error(PredictionMonths[i])
             } else {
                 table.innerHTML += "<tr><td>" + PredictionMonths[i].DateStarted + "</td><td>" + PredictionMonths[i].ProjectType + "</td><td>" + PredictionMonths[i].ClientName + "</td><td>" + PredictionMonths[i].Status + "</td><td><button onclick=\"document.location=\'mailto:" + PredictionMonths[i].ClientEmail + "\'\">" + "Send Mail To Client" + "</a></td><td>R" + (0.7 * PredictionMonths[i].ClientInvoiced).toFixed(2) + "</td><td>" + PredictionMonths[i].DueDate + "</td><td><button onclick=\"document.location=\'" + PredictionMonths[i].WaveURL + "\'\">View Invoice</button></td><td><button onclick=\"updateStatus('" + PredictionMonths[i].ProjectID + "')\">" + getNextStatus(PredictionMonths[i].ProjectID) + "</button></td><td><button style=\"background-color: red;\" onclick=\"delProject(\'" + PredictionMonths[i].ProjectID + "\')\">Cancel Project</button></td><td><button style=\"background-color: purple;\" onclick=\"document.location=\'https://" + PredictionMonths[i].Domain + "/wp-admin\'\">Edit Website</button></td></tr>";
                 if (PredictionMonths[i].Status == "Website Completed") {
@@ -231,12 +231,12 @@ function updateStatus(id) {
                 Jobs[i].Status = "Awaiting Client Payment";
                 sendMail(Jobs[i].ClientName, "We have Great News! Your website " + Jobs[i].Domain + " is all completed and ready for you and your customers to use! Should you want a course on maintaining your own website, we explain everything in detail here on how to manage, maintain and build your own pages! - https://www.jaxifysoftware.com/shop/course/ - To sign into the dashboard of your website, please use the following address " + Jobs[i].Domain + "/wp-admin - You'll click on forgot password, and reset it with your email account. It was really nice working with you, and we'd love it if you could review our services! - https://www.facebook.com/jaxifysoftware/reviews If you have not already, please remember to make the final payment of R" + (Jobs[i].ClientInvoiced - 150).toFixed(2), Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
                 let d = new Date;
-                Jobs[i].DateCompleted = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
                 window.open("https://" + Jobs[i].Domain + "/wp-admin/user-new.php")
 
             }
             if (status == "Awaiting Client Payment") {
                 Jobs[i].Status = "Website Completed";
+                Jobs[i].DateCompleted = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             }
