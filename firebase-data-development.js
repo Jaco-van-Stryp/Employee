@@ -187,6 +187,8 @@ function getNextStatus(id) {
                 return "I'm Ready To Start Working On The Project";
             } else if (status == "Website Work Started") {
                 return "I've Completed The Project";
+            } else if (status == "Awaiting Client Payment") {
+                return "Mark As Full Payment Received"
             } else return "";
         }
     }
