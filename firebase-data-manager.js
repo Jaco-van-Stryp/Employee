@@ -78,7 +78,7 @@
         var yyyy = today.getFullYear();
 
         today = mm + '/' + dd + '/' + yyyy;
-        sendMail(name + " " + surname, "Welcome To The Jaxify Software Team! Please Use The Following Login Information To Access Your Employee Dashboard: Email: " + email + " Password: " + password + " - You can use the following link to access this dashboard: employee.jaxifysoftware.com", email, "jaxifybusiness@gmail.com")
+        sendMail(name + " " + surname, "Welcome To The Jaxify Software Team! Please Use The Following Login Information To Access Your Employee Dashboard: Email: " + email + " Password: " + password + " - You can use the following link to access this dashboard: employee.jaxifysoftware.com - Please visit employee.jaxifysoftware.com/help for instructions or getting started with your first client!", email, "jaxifybusiness@gmail.com")
 
         db.collection("employees").doc(email).set({
                 id: employee_ID,
