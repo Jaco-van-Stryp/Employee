@@ -235,9 +235,9 @@ function updateStatus(id) {
 
             }
             if (status == "Awaiting Client Payment") {
+                let d = new Date;
                 Jobs[i].Status = "Website Completed";
                 Jobs[i].DateCompleted = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-
                 sendMail(Jobs[i].ClientName, "We just wanted to let you know that we've received your payment of R" + Jobs[i].ClientInvoiced + " for your website: " + Jobs[i].Domain + "!", Jobs[i].ClientEmail, Jobs[i].DeveloperEmail);
             }
             convertToFireBase(Jobs);
