@@ -177,9 +177,8 @@ function AddProject(UserPushEmail) {
 
             if (date1.getFullYear() == d.getFullYear() && date1.getMonth() == d.getMonth()) {
                 total++;
-                sumPayout += (0.7 * tempObj[i].ClientInvoiced)
+                sumPayout += (0.6 * tempObj[i].ClientInvoiced)
             }
-
         }
         //Temp Disabled
         /*   if (UserPushEmail == "jacovanstryp@gmail.com") { //This is compensation for development of this system & Setting Up Domains
